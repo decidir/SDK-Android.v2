@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">DEC2-sdk-android</string>
+    <string name="action_settings">Settings</string>
+    <string name="loading">Cargando&#8230;</string>
+
+    <string-array name="documents_types">
+        <item>DNI</item>
+        <item>CI</item>
+        <item>LE</item>
+        <item>LC</item>
+    </string-array>
+
+    <string-array name="installments">
+        <item>1</item>
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+    </string-array>
+
+</resources>

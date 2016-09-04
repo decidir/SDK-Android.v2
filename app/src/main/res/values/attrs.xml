@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ProgressBar Wheel -->
+
+    <declare-styleable name="ProgressWheel">
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="barColor" format="color" />
+        <attr name="rimColor" format="color" />
+        <attr name="rimWidth" format="dimension" />
+        <attr name="spinSpeed" format="dimension" />
+        <attr name="delayMillis" format="integer" />
+        <attr name="circleColor" format="color" />
+        <attr name="pbw_radius" format="dimension" />
+        <attr name="barWidth" format="dimension" />
+        <attr name="barLengths" format="dimension" />
+        <attr name="contourColor" format="color" />
+        <attr name="contourSize" format="dimension" />
+        <attr name="modeSpin" format="boolean" />
+        <attr name="gradientBar" format="boolean" />
+        <attr name="gradientBarStartColor" format="color" />
+        <attr name="gradientBarEndColor" format="color" />
+    </declare-styleable>
+
+</resources>
