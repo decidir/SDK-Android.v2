@@ -1,42 +1,19 @@
 package com.android.decidir.sdk.dto;
 
-import java.io.Serializable;
-
 /**
- * Created by biandra on 04/08/16.
+ * Created by biandra on 23/09/16.
  */
-public class Authentication implements Serializable {
+public abstract class Authentication {
 
-    private String card_number;
-    private String card_expiration_month;
-    private String card_expiration_year;
+    private FraudDetectionData fraud_detection ;
     private String security_code;
-    private String card_holder_name;
-    private CardHolderIdentification card_holder_identification;
-    private FraudDetectionData fraud_detection;
 
-    public String getCard_number() {
-        return card_number;
+    public FraudDetectionData getFraud_detection() {
+        return fraud_detection;
     }
 
-    public void setCard_number(String card_number) {
-        this.card_number = card_number;
-    }
-
-    public String getCard_expiration_month() {
-        return card_expiration_month;
-    }
-
-    public void setCard_expiration_month(String card_expiration_month) {
-        this.card_expiration_month = card_expiration_month;
-    }
-
-    public String getCard_expiration_year() {
-        return card_expiration_year;
-    }
-
-    public void setCard_expiration_year(String card_expiration_year) {
-        this.card_expiration_year = card_expiration_year;
+    public void setFraud_detection(FraudDetectionData fraud_detection) {
+        this.fraud_detection = fraud_detection;
     }
 
     public String getSecurity_code() {
@@ -45,29 +22,5 @@ public class Authentication implements Serializable {
 
     public void setSecurity_code(String security_code) {
         this.security_code = security_code;
-    }
-
-    public String getCard_holder_name() {
-        return card_holder_name;
-    }
-
-    public void setCard_holder_name(String card_holder_name) {
-        this.card_holder_name = card_holder_name;
-    }
-
-    public CardHolderIdentification getCard_holder_identification() {
-        return card_holder_identification;
-    }
-
-    public void setCard_holder_identification(CardHolderIdentification card_holder_identification) {
-        this.card_holder_identification = card_holder_identification;
-    }
-
-    public FraudDetectionData getFraud_detection() {
-        return fraud_detection;
-    }
-
-    public void setFraud_detection(FraudDetectionData fraud_detection) {
-        this.fraud_detection = fraud_detection;
     }
 }

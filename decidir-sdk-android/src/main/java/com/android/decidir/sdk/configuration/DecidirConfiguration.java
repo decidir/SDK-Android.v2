@@ -6,6 +6,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by biandra on 06/07/16.
@@ -21,9 +22,9 @@ public class DecidirConfiguration {
 
 
     public static <T> T initRetrofit(final String secretAccessToken, final String apiUrl, final Integer timeOut, final Class<T> serviceClass) {
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-               // .readTimeout(timeOut, TimeUnit.SECONDS)
-               // .connectTimeout(timeOut, TimeUnit.SECONDS);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+                .readTimeout(timeOut, TimeUnit.SECONDS)
+                .connectTimeout(timeOut, TimeUnit.SECONDS);
 
         httpClient.networkInterceptors().add(new Interceptor() {
 
@@ -33,6 +34,7 @@ public class DecidirConfiguration {
                 Request request = chain.request().newBuilder()
                         .header(CACHE_CONTROL, MAX_AGE_0)
                         .header(APIKEY, secretAccessToken)
+                        .header("X-Consumer-Username", secretAccessToken + "_public")
                         .header(USER_AGENT, getUserAgent())
                         .build();
 

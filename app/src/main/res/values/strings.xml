@@ -4,10 +4,10 @@
     <string name="loading">Cargando&#8230;</string>
 
     <string-array name="documents_types">
-        <item>DNI</item>
-        <item>CI</item>
-        <item>LE</item>
-        <item>LC</item>
+        <item>dni</item>
+        <item>ci</item>
+        <item>le</item>
+        <item>lc</item>
     </string-array>
 
     <string-array name="installments">

@@ -1,7 +1,6 @@
 package com.android.decidir.sdk.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by biandra on 04/08/16.
@@ -11,16 +10,16 @@ public class AuthenticationResponse implements Serializable {
     private String id;
     private boolean validation_result;
     private String status;
-    private Date date_used;
-    private Long card_number_length;
-    private Date date_created;
+    private String date_used;
+    private Integer card_number_length;
+    private String date_created;
     private String bin;
     private String last_four_digits;
     private Integer security_code_length;
     private Integer expiration_month;
     private Integer expiration_year;
-    private Date date_last_updated;
-    private Date date_due;
+    private String date_last_updated;
+    private String date_due;
     private CardholderData cardholder;
 
     public String getId() {
@@ -47,27 +46,27 @@ public class AuthenticationResponse implements Serializable {
         this.status = status;
     }
 
-    public Date getDate_used() {
+    public String getDate_used() {
         return date_used;
     }
 
-    public void setDate_used(Date date_used) {
+    public void setDate_used(String date_used) {
         this.date_used = date_used;
     }
 
-    public Long getCard_number_length() {
+    public Integer getCard_number_length() {
         return card_number_length;
     }
 
-    public void setCard_number_length(Long card_number_length) {
+    public void setCard_number_length(Integer card_number_length) {
         this.card_number_length = card_number_length;
     }
 
-    public Date getDate_created() {
+    public String getDate_created() {
         return date_created;
     }
 
-    public void setDate_created(Date date_created) {
+    public void setDate_created(String date_created) {
         this.date_created = date_created;
     }
 
@@ -111,19 +110,19 @@ public class AuthenticationResponse implements Serializable {
         this.expiration_year = expiration_year;
     }
 
-    public Date getDate_last_updated() {
+    public String getDate_last_updated() {
         return date_last_updated;
     }
 
-    public void setDate_last_updated(Date date_last_updated) {
+    public void setDate_last_updated(String date_last_updated) {
         this.date_last_updated = date_last_updated;
     }
 
-    public Date getDate_due() {
+    public String getDate_due() {
         return date_due;
     }
 
-    public void setDate_due(Date date_due) {
+    public void setDate_due(String date_due) {
         this.date_due = date_due;
     }
 

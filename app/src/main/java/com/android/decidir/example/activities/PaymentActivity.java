@@ -1,5 +1,6 @@
 package com.android.decidir.example.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,10 +10,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.decidir.example.R;
-import com.android.decidir.example.domain.PaymentError;
+import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.PaymentActivityListener;
 import com.android.decidir.example.viewmodel.PaymentActivityModel;
-import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithToken;
+import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.CardHolderIdentification;
 import com.decidir.sdk.dto.Payment;
 
@@ -25,9 +27,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
 
     @InjectView(R.id.etCreditCardNumber)
-    EditText etName;
-    @InjectView(R.id.etName)
     EditText etCreditCardNumber;
+    @InjectView(R.id.etName)
+    EditText etName;
     @InjectView(R.id.etExpirationMonth)
     EditText etExpirationMonth;
     @InjectView(R.id.etExpirationYear)
@@ -42,13 +44,19 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     Spinner sInstallments;
     @InjectView(R.id.tvResult)
     TextView tvResult;
+    @InjectView(R.id.etSecurityCodeWithTokenization)
+    EditText etSecurityCodeWithTokenization;
 
-    @InjectView(R.id.vPaymentDo)
-    View vPaymentDo;
+    @InjectView(R.id.vPaymentDoWithoutTokenization)
+    View vPaymentDoWithoutTokenization;
+    @InjectView(R.id.vPaymentDoWithTokenization)
+    View vPaymentDoWithTokenization;
     @InjectView(R.id.vPaymentResult)
     View vPaymentResult;
     @InjectView(R.id.vPaymentRequestLoading)
     View vPaymentRequestLoading;
+
+    private String token;
 
 
     @Override
@@ -57,7 +65,14 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
         setContentView(R.layout.activity_payment);
         ButterKnife.inject(this);
 
-
+        Intent intent = getIntent();
+        token = intent.getStringExtra(TokenizationActivity.TOKEN);
+        if (token == null){
+            onGetPaymentStartedWithoutTokenization();
+        }
+        else{
+            onGetPaymentStartedWithTokenization(token);
+        }
     }
 
     @Override
@@ -68,15 +83,33 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     }
 
     @Override
-    public void onGetPaymentStarted() {
-        vPaymentDo.setVisibility(View.GONE);
+    public void onGetPaymentStartedWithoutTokenization() {
+        vPaymentDoWithoutTokenization.setVisibility(View.VISIBLE);
+        vPaymentDoWithTokenization.setVisibility(View.GONE);
+        vPaymentResult.setVisibility(View.GONE);
+        vPaymentRequestLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onGetPaymentStartedWithTokenization(String token) {
+        vPaymentDoWithoutTokenization.setVisibility(View.GONE);
+        vPaymentDoWithTokenization.setVisibility(View.VISIBLE);
+        vPaymentResult.setVisibility(View.GONE);
+        vPaymentRequestLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onGetPaymentLoading() {
+        vPaymentDoWithoutTokenization.setVisibility(View.GONE);
+        vPaymentDoWithTokenization.setVisibility(View.GONE);
         vPaymentResult.setVisibility(View.GONE);
         vPaymentRequestLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onGetPaymentSuccess(Payment payment) {
-        vPaymentDo.setVisibility(View.GONE);
+        vPaymentDoWithoutTokenization.setVisibility(View.GONE);
+        vPaymentDoWithTokenization.setVisibility(View.GONE);
         vPaymentResult.setVisibility(View.VISIBLE);
         vPaymentRequestLoading.setVisibility(View.GONE);
 
@@ -84,37 +117,51 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     }
 
     @Override
-    public void onGetPaymentError(PaymentError paymentError) {
-        vPaymentDo.setVisibility(View.GONE);
+    public void onGetPaymentError(ErrorDetail errorDetail) {
+        vPaymentDoWithoutTokenization.setVisibility(View.GONE);
+        vPaymentDoWithTokenization.setVisibility(View.GONE);
         vPaymentResult.setVisibility(View.VISIBLE);
         vPaymentRequestLoading.setVisibility(View.GONE);
-        tvResult.setText("Error: " + paymentError.getMessage() + ", description: " + paymentError.getDescription());
+        tvResult.setText("Error: " + errorDetail.getMessage() + ", description: " + errorDetail.getDescription());
     }
 
-    @OnClick(R.id.bPay)
-    public void pay(){
+    @OnClick(R.id.bPayWithoutTokenization)
+    public void payWithoutTokenization(){
         PaymentActivityModel model = new PaymentActivityModel(this);
+        //etCreditCardNumber.setError("Invalid cardNumber");
         model.execute(getAuthentication());
+    }
+
+    @OnClick(R.id.bPayWithTokenization)
+    public void payWithTokenization(){
+        PaymentActivityModel model = new PaymentActivityModel(this);
+        model.execute(getAuthenticationWithToken());
     }
 
     @OnClick(R.id.bAccept)
     public void accept(){
-        vPaymentDo.setVisibility(View.VISIBLE);
-        vPaymentResult.setVisibility(View.GONE);
-        vPaymentRequestLoading.setVisibility(View.GONE);
+        this.finish();
     }
 
-    public Authentication getAuthentication() {
-        Authentication authentication = new Authentication();
-        authentication.setCard_number(etCreditCardNumber.getText().toString());
-        authentication.setCard_expiration_month(etExpirationMonth.getText().toString());
-        authentication.setCard_expiration_year(etExpirationYear.getText().toString());
-        authentication.setSecurity_code(etSecurityCode.getText().toString());
-        authentication.setCard_holder_name(etName.getText().toString());
+    public AuthenticationWithoutToken getAuthentication() {
+        AuthenticationWithoutToken authenticationWithoutToken = new AuthenticationWithoutToken();
+        authenticationWithoutToken.setCard_number(etCreditCardNumber.getText().toString());
+        authenticationWithoutToken.setCard_expiration_month(etExpirationMonth.getText().toString());
+        authenticationWithoutToken.setCard_expiration_year(etExpirationYear.getText().toString());
+        authenticationWithoutToken.setSecurity_code(etSecurityCode.getText().toString());
+        authenticationWithoutToken.setCard_holder_name(etName.getText().toString());
         CardHolderIdentification cardHolderIdentification = new CardHolderIdentification();
         cardHolderIdentification.setNumber(etDocumentNumber.getText().toString());
         cardHolderIdentification.setType(sDocumentType.getItemAtPosition(sDocumentType.getSelectedItemPosition()).toString());//TODO: cambiar a enum
         cardHolderIdentification.setNumber(etDocumentNumber.getText().toString());
-        return authentication;
+        authenticationWithoutToken.setCard_holder_identification(cardHolderIdentification);
+        return authenticationWithoutToken;
+    }
+
+    public AuthenticationWithToken getAuthenticationWithToken() {
+        AuthenticationWithToken authenticationWithToken = new AuthenticationWithToken();
+        authenticationWithToken.setToken(this.token);
+        authenticationWithToken.setSecurity_code(etSecurityCodeWithTokenization.getText().toString());
+        return authenticationWithToken;
     }
 }

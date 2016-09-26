@@ -2,7 +2,8 @@ package com.android.decidir.sdk.services;
 
 import com.android.decidir.sdk.converters.AuthenticateConverter;
 import com.android.decidir.sdk.converters.ErrorConverter;
-import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithToken;
+import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.AuthenticationResponse;
 import com.android.decidir.sdk.dto.DecidirError;
 import com.android.decidir.sdk.dto.DecidirResponse;
@@ -39,10 +40,29 @@ public class AuthenticateService {
         return service;
     }
 
-    public DecidirResponse<AuthenticationResponse> authenticate(Authentication authentication, String sessionID) {
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, String sessionID, Boolean withCybersource) {
         try {
-            authentication.setFraud_detection(fraudDetectionService.getFraudDetection(sessionID));
-            Response<AuthenticationResponse> response = this.authenticateApi.authenticate(authentication).execute();
+            if (withCybersource){
+                authenticationWithoutToken.setFraud_detection(fraudDetectionService.getFraudDetection(sessionID));
+            }
+            Response<AuthenticationResponse> response = this.authenticateApi.authenticate(authenticationWithoutToken).execute();
+            if (response.isSuccessful()) {
+                return authenticateConverter.convert(response, response.body());
+            } else {
+                DecidirResponse<DecidirError> error = errorConverter.convert(response);
+                throw DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
+            }
+        } catch(IOException ioe) {
+            throw new DecidirException(HTTP_500, ioe.getMessage());
+        }
+    }
+
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, String sessionID, Boolean withCybersource) {
+        try {
+            if (withCybersource){
+                authenticationWithToken.setFraud_detection(fraudDetectionService.getFraudDetection(sessionID));
+            }
+            Response<AuthenticationResponse> response = this.authenticateApi.authenticate(authenticationWithToken).execute();
             if (response.isSuccessful()) {
                 return authenticateConverter.convert(response, response.body());
             } else {

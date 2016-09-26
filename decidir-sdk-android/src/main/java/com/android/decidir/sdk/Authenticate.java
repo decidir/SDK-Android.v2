@@ -1,7 +1,8 @@
 package com.android.decidir.sdk;
 
 import com.android.decidir.sdk.configuration.DecidirConfiguration;
-import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithToken;
+import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.AuthenticationResponse;
 import com.android.decidir.sdk.dto.DecidirResponse;
 import com.android.decidir.sdk.exceptions.DecidirException;
@@ -39,7 +40,11 @@ public class Authenticate {
     }
 
 
-    public DecidirResponse<AuthenticationResponse> authenticate(Authentication authentication, String sessionID) throws DecidirException {
-        return authenticateService.authenticate(authentication, sessionID);
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, String sessionID, Boolean withCybersource) throws DecidirException {
+        return authenticateService.authenticate(authenticationWithoutToken, sessionID, withCybersource);
+    }
+
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, String sessionID, Boolean withCybersource) throws DecidirException {
+        return authenticateService.authenticate(authenticationWithToken, sessionID, withCybersource);
     }
 }

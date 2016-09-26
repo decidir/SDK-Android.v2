@@ -2,14 +2,17 @@ package com.android.decidir.example.viewmodel;
 
 import android.os.AsyncTask;
 
-import com.android.decidir.example.domain.PaymentError;
+import com.android.decidir.example.Constants;
+import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.PaymentActivityListener;
 import com.android.decidir.sdk.Authenticate;
+import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithToken;
 import com.android.decidir.sdk.exceptions.ApiException;
 import com.android.decidir.sdk.exceptions.DecidirException;
 import com.android.decidir.sdk.exceptions.NotFoundException;
 import com.android.decidir.sdk.exceptions.ValidateException;
-import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.AuthenticationResponse;
 import com.android.decidir.sdk.dto.DecidirResponse;
 import com.decidir.sdk.dto.BillingData;
@@ -21,10 +24,14 @@ import com.decidir.sdk.dto.CustomerInSite;
 import com.decidir.sdk.dto.FraudDetectionData;
 import com.decidir.sdk.dto.Payment;
 import com.decidir.sdk.dto.PurchaseTotals;
+import com.decidir.sdk.dto.SubPayment;
 import com.decidir.sdk.dto.TicketingTItem;
 import com.decidir.sdk.dto.TicketingTransactionData;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -32,60 +39,52 @@ import java.util.List;
  */
 public class PaymentActivityModel extends AsyncTask<Authentication, Void, Payment>{
 
-    public static final String PUBLIC_API_KEY = "4657cfbe7d194fcc8e2b436a3e9384ab";
-    public static final String PRIVATE_API_KEY = "47e7675a46c24a69afe00cd6ed425482";
     private PaymentActivityListener view;
-    private PaymentError paymentError;
+    private ErrorDetail errorDetail;
 
     public PaymentActivityModel(PaymentActivityListener view) {
         super();
         this.view = view;
     }
 
-    public Payment pay(Authentication authentication, int installments){
+    public Payment pay(AuthenticationWithoutToken authenticationWithoutToken, int installments){
+        Boolean withCybersource = false;
+        Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
+        Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, "sessionID", withCybersource);
+        com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
+                getPayment(responseAuthentication.getResult(),
+                        installments,
+                        (withCybersource) ? authenticationWithoutToken.getFraud_detection().getDevice_unique_id() : null));
+        return responsePayment.getResult();
+    }
 
-        Authenticate authenticate = new Authenticate(PUBLIC_API_KEY, "http://127.0.0.1:19002", 10);
-        Decidir decidir = new Decidir(PRIVATE_API_KEY, "http://127.0.0.1:19002", 20);
 
-        try {
-            DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authentication, "sessionID");
-            com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
-                    getPayment(responseAuthentication.getResult(),
-                            installments,
-                            authentication.getFraud_detection().getDevice_unique_id()));
-
-        } catch (ApiException apiException){
-            this.paymentError = new PaymentError(apiException.getMessage(), apiException.getErrorDetail().getMessage());
-        } catch (NotFoundException notFoundException){
-            this.paymentError = new PaymentError(notFoundException.getMessage(), notFoundException.getErrorDetail().getMessage());
-        } catch (ValidateException validateException){
-            this.paymentError = new PaymentError(validateException.getMessage(), validateException.getErrorDetail().toString());
-        } catch (DecidirException decidirException){
-            this.paymentError = new PaymentError(decidirException.getMessage(), String.valueOf(decidirException.getStatus()));
-        } catch (com.decidir.sdk.exceptions.ApiException apiException){
-            this.paymentError = new PaymentError(apiException.getMessage(), apiException.getErrorDetail().getMessage());
-        } catch (com.decidir.sdk.exceptions.NotFoundException notFoundException){
-            this.paymentError = new PaymentError(notFoundException.getMessage(), notFoundException.getErrorDetail().getMessage());
-        } catch (com.decidir.sdk.exceptions.ValidateException validateException){
-            this.paymentError = new PaymentError(validateException.getMessage(), validateException.getErrorDetail().toString());
-        } catch (com.decidir.sdk.exceptions.DecidirException decidirException){
-            this.paymentError = new PaymentError(decidirException.getMessage(), String.valueOf(decidirException.getStatus()));
-        }
-        return null;
+    public Payment pay(AuthenticationWithToken authenticationWithToken, int installments){
+        Boolean withCybersource = false;
+        Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
+        Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, "sessionID", withCybersource);
+        com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
+                getPayment(responseAuthentication.getResult(),
+                        installments,
+                        (withCybersource) ? authenticationWithToken.getFraud_detection().getDevice_unique_id() : null));
+        return responsePayment.getResult();
     }
 
     private Payment getPayment(AuthenticationResponse authenticationResponse, int installments, String deviceUniqueIdentifier) {
         Payment payment = new Payment();
-        payment.setSite_transaction_id("??");
+        payment.setSite_transaction_id(String.valueOf(GregorianCalendar.getInstance().getTimeInMillis()));
         payment.setToken(authenticationResponse.getId());
-        payment.setCard_brand(Card.AMEX);
+        payment.setUser_id("biandra");
+        payment.setCard_brand(Card.VISA);
         payment.setBin(authenticationResponse.getBin());
         payment.setAmount(2L);
         payment.setCurrency(Currency.ARS);
         payment.setInstallments(installments);
         payment.setDescription("description");
         payment.setPayment_type("single");
-        //payment.setSub_payments();
+        payment.setSub_payments(new ArrayList<SubPayment>());
         BillingData billingData = new BillingData();
         billingData.setCity("Buenos Aires");
         billingData.setCountry("AR");
@@ -132,14 +131,39 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         return payment;
     }
 
+
     @Override
     protected void onPreExecute(){
-        view.onGetPaymentStarted();
+        view.onGetPaymentLoading();
     }
 
     @Override
     protected Payment doInBackground(Authentication... params) {
-        return pay(params[0], 1);//TODO: revome hardcode 1
+        try {
+            if (params[0] instanceof AuthenticationWithoutToken) {
+                return pay((AuthenticationWithoutToken) params[0], 1);//TODO: revome hardcode 1
+            } else if (params[0] instanceof AuthenticationWithToken) {
+                return pay((AuthenticationWithToken) params[0], 1);//TODO: revome hardcode 1
+            }
+        }
+        catch (ApiException apiException){
+            this.errorDetail = new ErrorDetail(apiException.getMessage(), apiException.getErrorDetail().getMessage());
+        } catch (NotFoundException notFoundException){
+            this.errorDetail = new ErrorDetail(notFoundException.getMessage(), notFoundException.getErrorDetail().getMessage());
+        } catch (ValidateException validateException){
+            this.errorDetail = new ErrorDetail(validateException.getMessage(), validateException.getErrorDetail().toString());
+        } catch (DecidirException decidirException){
+            this.errorDetail = new ErrorDetail(decidirException.getMessage(), String.valueOf(decidirException.getStatus()));
+        } catch (com.decidir.sdk.exceptions.ApiException apiException){
+            this.errorDetail = new ErrorDetail(apiException.getMessage(), apiException.getErrorDetail().getMessage());
+        } catch (com.decidir.sdk.exceptions.NotFoundException notFoundException){
+            this.errorDetail = new ErrorDetail(notFoundException.getMessage(), notFoundException.getErrorDetail().getMessage());
+        } catch (com.decidir.sdk.exceptions.ValidateException validateException){
+            this.errorDetail = new ErrorDetail(validateException.getMessage(), validateException.getErrorDetail().toString());
+        } catch (com.decidir.sdk.exceptions.DecidirException decidirException){
+            this.errorDetail = new ErrorDetail(decidirException.getMessage(), String.valueOf(decidirException.getStatus()));
+        }
+        return null;
     }
 
     @Override
@@ -147,7 +171,7 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         if (payment != null) {
             view.onGetPaymentSuccess(payment);
         } else {
-            view.onGetPaymentError(paymentError);
+            view.onGetPaymentError(errorDetail);
         }
     }
 

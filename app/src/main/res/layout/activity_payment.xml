@@ -6,11 +6,12 @@
     android:layout_margin="10sp">
 
     <LinearLayout
-        android:id="@+id/vPaymentDo"
+        android:id="@+id/vPaymentDoWithoutTokenization"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -187,7 +188,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pay"
-                android:id="@+id/bPay"
+                android:id="@+id/bPayWithoutTokenization"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vPaymentDoWithTokenization"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Security code"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:id="@+id/etSecurityCodeWithTokenization"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:layout_marginBottom="10sp"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay"
+                android:id="@+id/bPayWithTokenization"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

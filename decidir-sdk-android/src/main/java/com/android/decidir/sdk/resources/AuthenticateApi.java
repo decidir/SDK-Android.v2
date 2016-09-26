@@ -1,6 +1,7 @@
 package com.android.decidir.sdk.resources;
 
-import com.android.decidir.sdk.dto.Authentication;
+import com.android.decidir.sdk.dto.AuthenticationWithToken;
+import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.AuthenticationResponse;
 
 import retrofit2.Call;
@@ -13,6 +14,9 @@ import retrofit2.http.POST;
 public interface AuthenticateApi {
 
     @POST("tokens")
-    Call<AuthenticationResponse> authenticate(@Body Authentication authentication);
+    Call<AuthenticationResponse> authenticate(@Body AuthenticationWithoutToken authenticationWithoutToken);
+
+    @POST("tokens")
+    Call<AuthenticationResponse> authenticate(@Body AuthenticationWithToken authenticationWithToken);
 
 }

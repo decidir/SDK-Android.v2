@@ -3,12 +3,12 @@ package com.android.decidir.example.domain;
 /**
  * Created by biandra on 28/08/16.
  */
-public class PaymentError {
+public class ErrorDetail {
 
     private String message;
     private String description;
 
-    public PaymentError(String message, String description){
+    public ErrorDetail(String message, String description){
         this.message = message;
         this.description = description;
     }
