@@ -138,4 +138,10 @@ public class TokenizationActivity extends AppCompatActivity implements Tokenizat
         cardTokenRequest.setUserSiteId(etUserId.getText().toString());
         return cardTokenRequest;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onGetCardTokenStarted();
+    }
 }

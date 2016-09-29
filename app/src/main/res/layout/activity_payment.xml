@@ -27,7 +27,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="4507990000004905"
+                android:text="4509790113276723"
                 android:id="@+id/etCreditCardNumber"/>
 
         </LinearLayout>
