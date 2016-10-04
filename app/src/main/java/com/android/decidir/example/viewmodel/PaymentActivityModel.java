@@ -3,6 +3,7 @@ package com.android.decidir.example.viewmodel;
 import android.os.AsyncTask;
 
 import com.android.decidir.example.Constants;
+import com.android.decidir.example.DecidirApp;
 import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.PaymentActivityListener;
 import com.android.decidir.sdk.Authenticate;
@@ -31,6 +32,7 @@ import com.decidir.sdk.dto.TicketingTransactionData;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by biandra on 17/08/16.
@@ -46,27 +48,27 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
     }
 
     public Payment pay(AuthenticationWithoutToken authenticationWithoutToken, int installments){
-        Boolean withCybersource = false;
+        Boolean withCybersource = true;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, "sessionID", withCybersource);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, DecidirApp.getAppContext(), getSessionID(), withCybersource);
         com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
                 getPayment(responseAuthentication.getResult(),
                         installments,
-                        (withCybersource) ? authenticationWithoutToken.getFraud_detection().getDevice_unique_id() : null));
+                        (withCybersource) ? authenticationWithoutToken.getFraud_detection().getDevice_unique_identifier() : null));
         return responsePayment.getResult();
     }
 
 
     public Payment pay(AuthenticationWithToken authenticationWithToken, int installments){
-        Boolean withCybersource = false;
+        Boolean withCybersource = true;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, "sessionID", withCybersource);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, DecidirApp.getAppContext(), getSessionID(), withCybersource);
         com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
                 getPayment(responseAuthentication.getResult(),
                         installments,
-                        (withCybersource) ? authenticationWithToken.getFraud_detection().getDevice_unique_id() : null));
+                        (withCybersource) ? authenticationWithToken.getFraud_detection().getDevice_unique_identifier() : null));
         return responsePayment.getResult();
     }
 
@@ -173,4 +175,7 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         }
     }
 
+    public String getSessionID() {
+        return UUID.randomUUID().toString();
+    }
 }

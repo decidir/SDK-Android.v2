@@ -1,9 +1,11 @@
 package com.android.decidir.sdk.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by biandra on 23/09/16.
  */
-public abstract class Authentication {
+public abstract class Authentication implements Serializable {
 
     private FraudDetectionData fraud_detection ;
     private String security_code;

@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    /*compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }*/
 }
 
 repositories {
@@ -27,5 +31,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile "com.squareup.retrofit2:converter-jackson:2.0.2"
+    //compile files('libs/TrustDefenderMobile-3.2-100-javadoc.jar')
     compile files('libs/TrustDefenderMobile-3.2-100.jar')
+    //compile files('libs/TrustDefenderMobile-3.2-100-native-libs.jar')
 }

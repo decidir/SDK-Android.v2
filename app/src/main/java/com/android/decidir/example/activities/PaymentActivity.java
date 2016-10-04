@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.decidir.example.R;
 import com.android.decidir.example.domain.ErrorDetail;
@@ -16,7 +17,11 @@ import com.android.decidir.example.viewmodel.PaymentActivityModel;
 import com.android.decidir.sdk.dto.AuthenticationWithToken;
 import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
 import com.android.decidir.sdk.dto.CardHolderIdentification;
+import com.android.decidir.sdk.dto.PaymentError;
+import com.android.decidir.sdk.validaters.AuthenticationValidator;
 import com.decidir.sdk.dto.Payment;
+
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -57,6 +62,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     View vPaymentRequestLoading;
 
     private String token;
+    private AuthenticationValidator validator;
 
 
     @Override
@@ -73,6 +79,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
         else{
             onGetPaymentStartedWithTokenization(token);
         }
+
+        validator = new AuthenticationValidator();
     }
 
     @Override
@@ -127,15 +135,42 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
     @OnClick(R.id.bPayWithoutTokenization)
     public void payWithoutTokenization(){
-        PaymentActivityModel model = new PaymentActivityModel(this);
-        //etCreditCardNumber.setError("Invalid cardNumber");
-        model.execute(getAuthentication());
+        AuthenticationWithoutToken authentication = getAuthentication();
+        Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
+        if (validation.isEmpty()){
+            PaymentActivityModel model = new PaymentActivityModel(this);
+            model.execute(authentication);
+        } else {
+            showErrors(authentication, validation);
+        }
     }
 
     @OnClick(R.id.bPayWithTokenization)
     public void payWithTokenization(){
-        PaymentActivityModel model = new PaymentActivityModel(this);
-        model.execute(getAuthenticationWithToken());
+        AuthenticationWithToken authentication = getAuthenticationWithToken();
+        Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
+        if (validation.isEmpty()){
+            PaymentActivityModel model = new PaymentActivityModel(this);
+            model.execute(authentication);
+        } else {
+            showErrors(authentication, validation);
+        }
+    }
+
+    private void showErrors(AuthenticationWithToken authentication, Map<PaymentError, String> validation) {
+        etSecurityCodeWithTokenization.setError(validation.get(PaymentError.SECURITY_CODE));
+    }
+
+    private void showErrors(AuthenticationWithoutToken authentication, Map<PaymentError, String> validation) {
+        etCreditCardNumber.setError(validation.get(PaymentError.CARD_NUMBER));
+        etName.setError(validation.get(PaymentError.CARD_HOLDER_NAME));
+        etSecurityCode.setError(validation.get(PaymentError.SECURITY_CODE));
+        etDocumentNumber.setError(validation.get(PaymentError.DNI));
+        etExpirationMonth.setError(validation.get(PaymentError.CARD_EXPIRATION_MONTH));
+        etExpirationYear.setError(validation.get(PaymentError.CARD_EXPIRATION_YEAR));
+        if (validation.get(PaymentError.CARD_EXPIRATION) != null){
+            Toast.makeText(getApplicationContext(), "CARD EXPIRATED", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.bAccept)

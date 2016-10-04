@@ -1,10 +1,12 @@
 package com.android.decidir.example.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,10 +22,12 @@ public class CardTokenAdapter extends BaseAdapter {
 
     private Context context;
     private List<CardToken> items;
+    private BtnClickListener btnClickListener;
 
-    public CardTokenAdapter(Context context, List<CardToken> items) {
+    public CardTokenAdapter(Context context, List<CardToken> items, BtnClickListener btnClickListener) {
         this.context = context;
         this.items = items;
+        this.btnClickListener = btnClickListener;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class CardTokenAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
 
         if (convertView == null) {
@@ -53,9 +57,9 @@ public class CardTokenAdapter extends BaseAdapter {
 
         ImageView ivItemCardBrand = (ImageView) rowView.findViewById(R.id.ivItemCardToken);
         TextView tvTitle = (TextView) rowView.findViewById(R.id.tvItemCardToken);
-        ImageView ivItemStatus = (ImageView) rowView.findViewById(R.id.ivItemStatus);
+        Button buttonDelete = (Button) rowView.findViewById(R.id.buttonDelete);
 
-        CardToken item = this.items.get(position);
+        final CardToken item = this.items.get(position);
         tvTitle.setText(getInformation(item));
         switch (item.getCard_brand()){
             case MASTERCARD :
@@ -72,10 +76,17 @@ public class CardTokenAdapter extends BaseAdapter {
                 break;
             default: ivItemCardBrand.setImageResource(R.mipmap.ic_launcher);
         }
+
+        buttonDelete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                btnClickListener.onBtnClick(position);
+            }
+        });
         if (item.getExpired()){
-            ivItemStatus.setImageResource(R.mipmap.delete);
+            rowView.setBackgroundColor(Color.RED);
         } else {
-            ivItemStatus.setImageResource(R.mipmap.accept);
+            rowView.setBackgroundColor(Color.WHITE);
         }
 
         return rowView;

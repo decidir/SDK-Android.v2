@@ -1,11 +1,10 @@
 package com.android.decidir.sdk.dto;
 
-import java.io.Serializable;
 
 /**
  * Created by biandra on 04/08/16.
  */
-public class AuthenticationWithoutToken extends Authentication implements Serializable {
+public class AuthenticationWithoutToken extends Authentication {
 
     private String card_number;
     private String card_expiration_month;

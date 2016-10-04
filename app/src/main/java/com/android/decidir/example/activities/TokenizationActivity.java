@@ -8,8 +8,10 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.decidir.example.R;
+import com.android.decidir.example.adapters.BtnClickListener;
 import com.android.decidir.example.adapters.CardTokenAdapter;
 import com.android.decidir.example.domain.CardTokenRequest;
 import com.android.decidir.example.domain.ErrorDetail;
@@ -77,22 +79,27 @@ public class TokenizationActivity extends AppCompatActivity implements Tokenizat
     }
 
     private void showCardTokens(List<CardToken> cardTokens) {
-        this.lvCardTokens.setAdapter(new CardTokenAdapter(this, cardTokens));
+        this.lvCardTokens.setAdapter(new CardTokenAdapter(this, cardTokens, new BtnClickListener() {
+            @Override
+            public void onBtnClick(int position) {
+                CardToken cardToken = (CardToken) lvCardTokens.getAdapter().getItem(position);
+                TokenizationActivityModel model = new TokenizationActivityModel(TokenizationActivity.this);
+                CardTokenRequest cardTokenRequest = getCardTokenRequest();
+                cardTokenRequest.setToken(cardToken.getToken());
+                model.execute(cardTokenRequest);
+            }
+        }));
 
         this.lvCardTokens.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-
                 CardToken cardToken = (CardToken) lvCardTokens.getAdapter().getItem(position);
-                if (!cardToken.getExpired()) {
+                if (cardToken.getExpired()){
+                    Toast.makeText(getApplicationContext(), "HAS EXPIRATED", Toast.LENGTH_SHORT).show();
+                } else{
                     Intent intent = new Intent(getBaseContext(), PaymentActivity.class);
                     intent.putExtra(TOKEN, cardToken.getToken());
                     startActivity(intent);
-                } else {
-                    TokenizationActivityModel model = new TokenizationActivityModel(TokenizationActivity.this);
-                    CardTokenRequest cardTokenRequest = getCardTokenRequest();
-                    cardTokenRequest.setToken(cardToken.getToken());
-                    model.execute(cardTokenRequest);
                 }
             }
         });

@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 public class FraudDetectionData implements Serializable {
 
-    private String device_unique_id;
+    private String device_unique_identifier;
 
-    public String getDevice_unique_id() {
-        return device_unique_id;
+    public String getDevice_unique_identifier() {
+        return device_unique_identifier;
     }
 
-    public void setDevice_unique_id(String device_unique_id) {
-        this.device_unique_id = device_unique_id;
+    public void setDevice_unique_identifier(String device_unique_identifier) {
+        this.device_unique_identifier = device_unique_identifier;
     }
 }

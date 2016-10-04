@@ -1,5 +1,7 @@
 package com.android.decidir.sdk.services;
 
+import android.content.Context;
+
 import com.android.decidir.sdk.converters.ErrorConverter;
 import com.android.decidir.sdk.dto.DecidirError;
 import com.android.decidir.sdk.dto.DecidirResponse;
@@ -7,6 +9,8 @@ import com.android.decidir.sdk.dto.FraudDetectionData;
 import com.android.decidir.sdk.dto.FraudDetectionResponse;
 import com.android.decidir.sdk.exceptions.DecidirException;
 import com.android.decidir.sdk.resources.FraudDetectionApi;
+import com.threatmetrix.TrustDefenderMobile.EndNotifier;
+import com.threatmetrix.TrustDefenderMobile.ProfilingResult;
 import com.threatmetrix.TrustDefenderMobile.THMStatusCode;
 import com.threatmetrix.TrustDefenderMobile.TrustDefenderMobile;
 
@@ -37,7 +41,7 @@ public class FraudDetectionService {
         return service;
     }
 
-    public FraudDetectionData getFraudDetection(String sessionID) throws DecidirException {
+    public FraudDetectionData getFraudDetection(String sessionID, Context context) throws DecidirException {
         FraudDetectionResponse fDResponse;
         try {
             Response<FraudDetectionResponse> response = this.fraudDetectionApi.getfrauddetectionconf().execute();
@@ -51,17 +55,26 @@ public class FraudDetectionService {
             throw new DecidirException(HTTP_500, ioe.getMessage());
         }
         FraudDetectionData fraudDetectionData = new FraudDetectionData();
-        fraudDetectionData.setDevice_unique_id(getUniqueIdFD(fDResponse.getMerchant_id(), sessionID));
+        fraudDetectionData.setDevice_unique_identifier(getUniqueIdFD(fDResponse, context));
         return fraudDetectionData;
     }
 
-    private String getUniqueIdFD(String MerchantId, String sessionID){
-        final TrustDefenderMobile profile = new TrustDefenderMobile(MerchantId+sessionID);
+    private String getUniqueIdFD(FraudDetectionResponse fDResponse, Context context){
+
+
+
+
+        /*TrustDefenderMobile profile = new TrustDefenderMobile(fDResponse.getOrg_id());
         THMStatusCode status = profile.doProfileRequest();
         if(status == THMStatusCode.THM_OK) {
             return profile.getResult().getSessionID();
         } else {
             throw new DecidirException(HTTP_401, status.getDesc());
-        }
+        }*/
+
+        RiskHelperService riskHelper = new RiskHelperService(fDResponse, context);
+        return riskHelper.getSessionId();
     }
+
+
 }
