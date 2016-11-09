@@ -51,7 +51,7 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         Boolean withCybersource = true;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, DecidirApp.getAppContext(), getSessionID(), withCybersource);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, DecidirApp.getAppContext(), withCybersource, 30);
         com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
                 getPayment(responseAuthentication.getResult(),
                         installments,
@@ -64,7 +64,7 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         Boolean withCybersource = true;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, DecidirApp.getAppContext(), getSessionID(), withCybersource);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, DecidirApp.getAppContext(), withCybersource, 30);
         com.decidir.sdk.dto.DecidirResponse<Payment> responsePayment = decidir.confirmPayment(
                 getPayment(responseAuthentication.getResult(),
                         installments,
@@ -173,9 +173,5 @@ public class PaymentActivityModel extends AsyncTask<Authentication, Void, Paymen
         } else {
             view.onGetPaymentError(errorDetail);
         }
-    }
-
-    public String getSessionID() {
-        return UUID.randomUUID().toString();
     }
 }

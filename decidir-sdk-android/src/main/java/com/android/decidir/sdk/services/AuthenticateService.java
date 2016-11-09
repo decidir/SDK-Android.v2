@@ -43,10 +43,10 @@ public class AuthenticateService {
         return service;
     }
 
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, String sessionID, Boolean withCybersource) {
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) {
         try {
             if (withCybersource){
-                authenticationWithoutToken.setFraud_detection(fraudDetectionService.getFraudDetection(sessionID, context));
+                authenticationWithoutToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
             }
             Response<AuthenticationResponse> response = this.authenticateApi.authenticate(authenticationWithoutToken).execute();
             if (response.isSuccessful()) {
@@ -60,10 +60,10 @@ public class AuthenticateService {
         }
     }
 
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, String sessionID, Boolean withCybersource) {
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) {
         try {
             if (withCybersource){
-                authenticationWithToken.setFraud_detection(fraudDetectionService.getFraudDetection(sessionID, context));
+                authenticationWithToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
             }
             Response<AuthenticationResponse> response = this.authenticateApi.authenticate(authenticationWithToken).execute();
             if (response.isSuccessful()) {

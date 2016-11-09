@@ -26,7 +26,6 @@ public class FraudDetectionService {
     private FraudDetectionApi fraudDetectionApi;
     private static FraudDetectionService service = null;
     public static final int HTTP_500 = 500;
-    public static final int HTTP_401 = 401;
     private ErrorConverter errorConverter;
 
     public FraudDetectionService(FraudDetectionApi fraudDetectionApi, ErrorConverter errorConverter){
@@ -41,7 +40,7 @@ public class FraudDetectionService {
         return service;
     }
 
-    public FraudDetectionData getFraudDetection(String sessionID, Context context) throws DecidirException {
+    public FraudDetectionData getFraudDetection(Context context, Integer profilingTimeoutSecs) throws DecidirException {
         FraudDetectionResponse fDResponse;
         try {
             Response<FraudDetectionResponse> response = this.fraudDetectionApi.getfrauddetectionconf().execute();
@@ -55,25 +54,12 @@ public class FraudDetectionService {
             throw new DecidirException(HTTP_500, ioe.getMessage());
         }
         FraudDetectionData fraudDetectionData = new FraudDetectionData();
-        fraudDetectionData.setDevice_unique_identifier(getUniqueIdFD(fDResponse, context));
+        fraudDetectionData.setDevice_unique_identifier(getUniqueIdFD(fDResponse.getOrg_id(), context, profilingTimeoutSecs));
         return fraudDetectionData;
     }
 
-    private String getUniqueIdFD(FraudDetectionResponse fDResponse, Context context){
-
-
-
-
-        /*TrustDefenderMobile profile = new TrustDefenderMobile(fDResponse.getOrg_id());
-        THMStatusCode status = profile.doProfileRequest();
-        if(status == THMStatusCode.THM_OK) {
-            return profile.getResult().getSessionID();
-        } else {
-            throw new DecidirException(HTTP_401, status.getDesc());
-        }*/
-
-        RiskHelperService riskHelper = new RiskHelperService(fDResponse, context);
-        return riskHelper.getSessionId();
+    private String getUniqueIdFD(String orgId, Context context, Integer profilingTimeoutSecs){
+        return new RiskHelperService(orgId, context, profilingTimeoutSecs).getSessionId();
     }
 
 

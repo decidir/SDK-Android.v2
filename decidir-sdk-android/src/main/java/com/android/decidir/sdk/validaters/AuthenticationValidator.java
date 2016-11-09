@@ -22,6 +22,22 @@ import java.util.Map;
  */
 public class AuthenticationValidator {
 
+    public static final String VISA = "visa";
+    public static final String MASTERCARD = "mastercard";
+    public static final String AMEX = "amex";
+    public static final String CARTE_BLANCHE_CARD = "Carte Blanche Card";
+    public static final String DISCOVER = "discover";
+    public static final String JCB = "jcb";
+    public static final String VISAMASTER = "visamaster";
+    public static final String INSTA = "insta";
+    public static final String LASER = "laser";
+    public static final String MAESTRO = "maestro";
+    public static final String SOLO = "solo";
+    public static final String SWITCH = "switch";
+    public static final String UNION = "union";
+    public static final String KOREAN = "korean";
+    public static final String BCGLOBAL = "bcglobal";
+    public static final String NARANJA = "naranja";
     private Context context;
 
     public Map<PaymentError, String> validate(AuthenticationWithoutToken authentication, Context context){
@@ -91,7 +107,7 @@ public class AuthenticationValidator {
     }
 
     private boolean isNaranja(String cardType) {
-        return "naranja".equals(cardType);
+        return NARANJA.equals(cardType);
     }
 
     private String getCardType(String cardNumber) {
@@ -145,22 +161,22 @@ public class AuthenticationValidator {
 
     private List<IssuingNetworks> getIssuingNetworks() {
         List<IssuingNetworks> issuingNetworkses = new ArrayList<>();
-        issuingNetworkses.add(new IssuingNetworks("visa", "^4[0-9]{12}(?:[0-9]{3})?$"));
-        issuingNetworkses.add(new IssuingNetworks("mastercard", "^5[1-5][0-9]{14}$"));
-        issuingNetworkses.add(new IssuingNetworks("amex", "^3[47][0-9]{13}$"));
-        issuingNetworkses.add(new IssuingNetworks("Carte Blanche Card", "^389[0-9]{11}$"));
-        issuingNetworkses.add(new IssuingNetworks("discover", "^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$"));
-        //issuingNetworkses.add(new IssuingNetworks("jcb", "^(?:2131|1800|35\d{3})\d{11}$"));
-        issuingNetworkses.add(new IssuingNetworks("visamaster", "^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$"));
-        issuingNetworkses.add(new IssuingNetworks("insta", "^63[7-9][0-9]{13}$"));
-        issuingNetworkses.add(new IssuingNetworks("laser", "^(6304|6706|6709|6771)[0-9]{12,15}$"));
-        issuingNetworkses.add(new IssuingNetworks("maestro", "^(5018|5020|5038|6304|6759|6761|6763)[0-9]{8,15}$"));
-        issuingNetworkses.add(new IssuingNetworks("solo", "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$/"));
-        issuingNetworkses.add(new IssuingNetworks("switch", "^(4903|4905|4911|4936|6333|6759)[0-9]{12}|(4903|4905|4911|4936|6333|6759)[0-9]{14}|(4903|4905|4911|4936|6333|6759)[0-9]{name: {15}|564182[0-9]{10}|564182[0-9]{12}|564182[0-9]{13}|633110[0-9]{10}|633110[0-9]{12}|633110[0-9]{13}$"));
-        issuingNetworkses.add(new IssuingNetworks("union", "^(62[0-9]{14,17})$"));
-        issuingNetworkses.add(new IssuingNetworks("korean", "^9[0-9]{15}$"));
-        issuingNetworkses.add(new IssuingNetworks("bcglobal", "^(6541|6556)[0-9]{12}$"));
-        issuingNetworkses.add(new IssuingNetworks("naranja", "^589562[0-9]{10}$"));
+        issuingNetworkses.add(new IssuingNetworks(VISA, "^4[0-9]{12}(?:[0-9]{3})?$"));
+        issuingNetworkses.add(new IssuingNetworks(MASTERCARD, "^5[1-5][0-9]{14}$"));
+        issuingNetworkses.add(new IssuingNetworks(AMEX, "^3[47][0-9]{13}$"));
+        issuingNetworkses.add(new IssuingNetworks(CARTE_BLANCHE_CARD, "^389[0-9]{11}$"));
+        issuingNetworkses.add(new IssuingNetworks(DISCOVER, "^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$"));
+        issuingNetworkses.add(new IssuingNetworks(JCB, "^(?:2131|1800|35\\d{3})\\d{11}$"));
+        issuingNetworkses.add(new IssuingNetworks(VISAMASTER, "^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$"));
+        issuingNetworkses.add(new IssuingNetworks(INSTA, "^63[7-9][0-9]{13}$"));
+        issuingNetworkses.add(new IssuingNetworks(LASER, "^(6304|6706|6709|6771)[0-9]{12,15}$"));
+        issuingNetworkses.add(new IssuingNetworks(MAESTRO, "^(5018|5020|5038|6304|6759|6761|6763)[0-9]{8,15}$"));
+        issuingNetworkses.add(new IssuingNetworks(SOLO, "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$/"));
+        issuingNetworkses.add(new IssuingNetworks(SWITCH, "^(4903|4905|4911|4936|6333|6759)[0-9]{12}|(4903|4905|4911|4936|6333|6759)[0-9]{14}|(4903|4905|4911|4936|6333|6759)[0-9]{name: {15}|564182[0-9]{10}|564182[0-9]{12}|564182[0-9]{13}|633110[0-9]{10}|633110[0-9]{12}|633110[0-9]{13}$"));
+        issuingNetworkses.add(new IssuingNetworks(UNION, "^(62[0-9]{14,17})$"));
+        issuingNetworkses.add(new IssuingNetworks(KOREAN, "^9[0-9]{15}$"));
+        issuingNetworkses.add(new IssuingNetworks(BCGLOBAL, "^(6541|6556)[0-9]{12}$"));
+        issuingNetworkses.add(new IssuingNetworks(NARANJA, "^589562[0-9]{10}$"));
         return issuingNetworkses;
     }
 

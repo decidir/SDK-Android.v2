@@ -2,7 +2,7 @@ package com.android.decidir.sdk.services;
 
     import android.content.Context;
 
-    import com.android.decidir.sdk.dto.FraudDetectionResponse;
+    import com.android.decidir.sdk.exceptions.DecidirException;
     import com.threatmetrix.TrustDefenderMobile.EndNotifier;
     import com.threatmetrix.TrustDefenderMobile.ProfilingResult;
     import com.threatmetrix.TrustDefenderMobile.THMStatusCode;
@@ -11,28 +11,19 @@ package com.android.decidir.sdk.services;
  * Created by biandra on 30/09/16.
  */
 
-
-
 public class RiskHelperService {
 
-    /** The Constant PROFILING_TIMEOUT_SECS. */
+    public static final int HTTP_401 = 401;
     final public static int PROFILING_TIMEOUT_SECS = 30;
-
-    /** The session id. */
+    private int timeout;
     private String sessionId;
-
     private TrustDefenderMobile profile;
     private Context context;
-    //private String merchant_id;
 
-    /**
-     * The constructor
-     *
-     */
-    public RiskHelperService(FraudDetectionResponse fDResponse, Context context) {
+    public RiskHelperService(String orgId, Context context, Integer profilingTimeoutSecs) {
         this.context = context;
-        //this.merchant_id = fDResponse.getMerchant_id();
-        this.profile = new TrustDefenderMobile(fDResponse.getOrg_id());
+        this.profile = new TrustDefenderMobile(orgId);
+        this.timeout = (profilingTimeoutSecs == null) ? PROFILING_TIMEOUT_SECS : profilingTimeoutSecs.intValue();
     }
 
 
@@ -54,7 +45,6 @@ public class RiskHelperService {
         return this.sessionId;
     }
 
-
     /**
      * Initialize the TrustDefenderMobile profiling with options.
      */
@@ -65,21 +55,12 @@ public class RiskHelperService {
         // initialize Threatmetrix with profiling options
         this.profile.init(new com.threatmetrix.TrustDefenderMobile.Config()
                 .setDisableOkHttp(true)
-                .setTimeout(PROFILING_TIMEOUT_SECS)
+                .setTimeout(timeout)
                 .setRegisterForLocationServices(true)
-                .setContext(/*this.config.getContext()*/this.context)
+                .setContext(this.context)
                 .setEndNotifier(new EndNotifier() {
                     @Override
                     public void complete(ProfilingResult result) {
-                        // Called once profiling is complete
-                        if (result.getStatus() == THMStatusCode.THM_OK) {
-                            // success!
-                            // do nothing special
-                        } else {
-                            // failed
-                            // do nothing special
-                        }
-
                         // stop requesting location
                         riskHelper.stopLocationServices();
 
@@ -101,11 +82,9 @@ public class RiskHelperService {
         THMStatusCode status = this.profile.doProfileRequest();
 
         if (status == THMStatusCode.THM_OK) {
-            // The profiling successfully started, return session id
             return this.profile.getResult().getSessionID();
         } else {
-            // profiling failed, return null
-            return null;
+            throw new DecidirException(HTTP_401, status.getDesc());
         }
     }
 

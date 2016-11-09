@@ -42,11 +42,11 @@ public class Authenticate {
     }
 
 
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, String sessionID, Boolean withCybersource) throws DecidirException {
-        return authenticateService.authenticate(authenticationWithoutToken, context, sessionID, withCybersource);
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
+        return authenticateService.authenticate(authenticationWithoutToken, context, withCybersource, profilingTimeoutSecs);
     }
 
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, String sessionID, Boolean withCybersource) throws DecidirException {
-        return authenticateService.authenticate(authenticationWithToken, context, sessionID, withCybersource);
+    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
+        return authenticateService.authenticate(authenticationWithToken, context, withCybersource, profilingTimeoutSecs);
     }
 }
