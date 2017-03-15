@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class AuthenticationResponse implements Serializable {
 
     private String id;
-    private boolean validation_result;
     private String status;
     private String date_used;
     private Integer card_number_length;
@@ -18,7 +17,6 @@ public class AuthenticationResponse implements Serializable {
     private Integer security_code_length;
     private Integer expiration_month;
     private Integer expiration_year;
-    private String date_last_updated;
     private String date_due;
     private CardholderData cardholder;
 
@@ -28,14 +26,6 @@ public class AuthenticationResponse implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isValidation_result() {
-        return validation_result;
-    }
-
-    public void setValidation_result(boolean validation_result) {
-        this.validation_result = validation_result;
     }
 
     public String getStatus() {
@@ -109,15 +99,6 @@ public class AuthenticationResponse implements Serializable {
     public void setExpiration_year(Integer expiration_year) {
         this.expiration_year = expiration_year;
     }
-
-    public String getDate_last_updated() {
-        return date_last_updated;
-    }
-
-    public void setDate_last_updated(String date_last_updated) {
-        this.date_last_updated = date_last_updated;
-    }
-
     public String getDate_due() {
         return date_due;
     }

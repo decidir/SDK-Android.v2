@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Identification implements Serializable {
 
     private String type;
-    private Long number;
+    private String number;
 
     public String getType() {
         return type;
@@ -18,11 +18,11 @@ public class Identification implements Serializable {
         this.type = type;
     }
 
-    public Long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 }

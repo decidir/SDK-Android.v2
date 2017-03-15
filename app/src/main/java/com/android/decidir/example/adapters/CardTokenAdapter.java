@@ -61,17 +61,17 @@ public class CardTokenAdapter extends BaseAdapter {
 
         final CardToken item = this.items.get(position);
         tvTitle.setText(getInformation(item));
-        switch (item.getCard_brand()){
-            case MASTERCARD :
+        switch (item.getPayment_method_id()){
+            case 15 :
                 ivItemCardBrand.setImageResource(R.mipmap.mastercard);
                 break;
-            case VISA:
+            case 1:
                 ivItemCardBrand.setImageResource(R.mipmap.visa);
                 break;
-            case AMEX :
+            case 65 :
                 ivItemCardBrand.setImageResource(R.mipmap.amex);
                 break;
-            case CABAL :
+            case 27 :
                 ivItemCardBrand.setImageResource(R.mipmap.cabal);
                 break;
             default: ivItemCardBrand.setImageResource(R.mipmap.ic_launcher);

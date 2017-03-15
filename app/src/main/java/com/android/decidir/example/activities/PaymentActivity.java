@@ -21,6 +21,7 @@ import com.android.decidir.sdk.dto.PaymentError;
 import com.android.decidir.sdk.validaters.AuthenticationValidator;
 import com.decidir.sdk.dto.Payment;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -47,11 +48,16 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     EditText etSecurityCode;
     @InjectView(R.id.sInstallments)
     Spinner sInstallments;
+    @InjectView(R.id.sInstallmentsWithToken)
+    Spinner sInstallmentsWithToken;
     @InjectView(R.id.tvResult)
     TextView tvResult;
     @InjectView(R.id.etSecurityCodeWithTokenization)
     EditText etSecurityCodeWithTokenization;
-
+    @InjectView(R.id.spinnerCS)
+    Spinner spinnerCS;
+    @InjectView(R.id.spinnerCSWithToken)
+    Spinner spinnerCSWithToken;
     @InjectView(R.id.vPaymentDoWithoutTokenization)
     View vPaymentDoWithoutTokenization;
     @InjectView(R.id.vPaymentDoWithTokenization)
@@ -135,11 +141,16 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
     @OnClick(R.id.bPayWithoutTokenization)
     public void payWithoutTokenization(){
-        AuthenticationWithoutToken authentication = getAuthentication();
+        final AuthenticationWithoutToken authentication = getAuthentication();
         Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
         if (validation.isEmpty()){
             PaymentActivityModel model = new PaymentActivityModel(this);
-            model.execute(authentication);
+            model.execute(new ArrayList<Object>() {{
+                add(authentication);
+                add(sInstallments.getSelectedItem());
+                add(spinnerCS.getSelectedItemPosition());
+                add(etName.getText().toString());
+            }});
         } else {
             showErrors(authentication, validation);
         }
@@ -147,11 +158,15 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
     @OnClick(R.id.bPayWithTokenization)
     public void payWithTokenization(){
-        AuthenticationWithToken authentication = getAuthenticationWithToken();
+        final AuthenticationWithToken authentication = getAuthenticationWithToken();
         Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
         if (validation.isEmpty()){
             PaymentActivityModel model = new PaymentActivityModel(this);
-            model.execute(authentication);
+            model.execute(new ArrayList<Object>() {{
+                add(authentication);
+                add(sInstallmentsWithToken.getSelectedItem());
+                add(spinnerCSWithToken.getSelectedItemPosition());
+            }});
         } else {
             showErrors(authentication, validation);
         }

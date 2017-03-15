@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 
 android {
+    lintOptions {
+        abortOnError false
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
@@ -41,5 +44,4 @@ dependencies {
 
     //testCompile 'com.android.support.test:runner:0.2'
     //testCompile 'com.android.support.test:rules:0.2'
-
 }

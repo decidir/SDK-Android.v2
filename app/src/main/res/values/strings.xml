@@ -17,4 +17,10 @@
         <item>12</item>
     </string-array>
 
+    <string-array name="verticals">
+        <item>Sin CS</item>
+        <item>Vertical Retails</item>
+        <item>Vertical Ticketing</item>
+    </string-array>
+
 </resources>
