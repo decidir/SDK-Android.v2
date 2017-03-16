@@ -174,6 +174,8 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
             this.errorDetail = new ErrorDetail(validateException.getMessage(), validateException.getErrorDetail().toString());
         } catch (com.decidir.sdk.exceptions.DecidirException decidirException){
             this.errorDetail = new ErrorDetail(decidirException.getMessage(), String.valueOf(decidirException.getStatus()));
+        } catch (com.decidir.sdk.exceptions.PaymentException paymentException){
+            this.errorDetail = new ErrorDetail(paymentException.getMessage(), paymentException.getPayment().getStatus_details().toString());
         }
         return null;
     }

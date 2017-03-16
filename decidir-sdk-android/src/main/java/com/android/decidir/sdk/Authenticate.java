@@ -21,6 +21,12 @@ public class Authenticate {
     private static Integer timeOut = 2;
     private AuthenticateService authenticateService;
 
+    /**
+     * Authenticate
+     * @param secretAccessToken
+     * @param apiUrl
+     * @param timeOut
+     */
     public Authenticate(final String secretAccessToken, final String apiUrl, final Integer timeOut) {
         if (apiUrl != null) {
             this.apiUrl = apiUrl;
@@ -33,19 +39,45 @@ public class Authenticate {
                 DecidirConfiguration.initRetrofit(secretAccessToken, this.apiUrl, this.timeOut, FraudDetectionApi.class));
     }
 
+    /**
+     * Authenticate
+     * @param secretAccessToken
+     */
     public Authenticate(final String secretAccessToken) {
         this(secretAccessToken, null, null);
     }
 
+    /**
+     * Authenticate
+     * @param secretAccessToken
+     * @param apiUrl
+     */
     public Authenticate(final String secretAccessToken, final String apiUrl) {
         this(secretAccessToken, apiUrl, null);
     }
 
-
+    /**
+     * Authenticate without token
+     * @param authenticationWithoutToken
+     * @param context
+     * @param withCybersource
+     * @param profilingTimeoutSecs
+     * @return a {@link AuthenticationResponse} with the {@link AuthenticationResponse}
+     * @throws DecidirException when an error ocurrs
+     */
     public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
         return authenticateService.authenticate(authenticationWithoutToken, context, withCybersource, profilingTimeoutSecs);
     }
 
+    /**
+     * Authenticate with token
+     * @param authenticationWithToken
+     * @param context
+     * @param withCybersource
+     * @param profilingTimeoutSecs
+     * @return a {@link AuthenticationResponse} with the {@link AuthenticationResponse}
+     * @throws DecidirException when an error ocurrs
+     */
     public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
         return authenticateService.authenticate(authenticationWithToken, context, withCybersource, profilingTimeoutSecs);
     }

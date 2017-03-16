@@ -41,7 +41,7 @@ repositories {
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.decidir.api:DEC2-sdk-java:0.1.10-SNAPSHOT'
+    compile 'com.decidir.api:DEC2-sdk-java:0.1.9-SNAPSHOT'
     compile project(':decidir-sdk-android')
     //compile 'com.jakewharton:butterknife:8.2.1'
     //apt 'com.jakewharton:butterknife-compiler:8.2.1'
