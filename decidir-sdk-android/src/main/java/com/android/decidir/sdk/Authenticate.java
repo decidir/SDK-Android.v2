@@ -17,7 +17,7 @@ import com.android.decidir.sdk.services.AuthenticateService;
  */
 public class Authenticate {
 
-    private static String apiUrl = "https://api.decidir.com";
+    private static String apiUrl = "https://live.decidir.com/api";
     private static Integer timeOut = 2;
     private AuthenticateService authenticateService;
 
@@ -35,7 +35,7 @@ public class Authenticate {
             this.timeOut =timeOut;
         }
         this.authenticateService = AuthenticateService.getInstance(
-                DecidirConfiguration.initRetrofit(secretAccessToken, this.apiUrl, this.timeOut, AuthenticateApi.class),
+                DecidirConfiguration.(secretAccessToken, this.apiUrl, this.timeOut, AuthenticateApi.class),
                 DecidirConfiguration.initRetrofit(secretAccessToken, this.apiUrl, this.timeOut, FraudDetectionApi.class));
     }
 
