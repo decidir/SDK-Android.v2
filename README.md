@@ -21,7 +21,7 @@ Modulo para conexión con gateway de pago DECIDIR2
 <a name="instalacion"></a>
 ## Instalación
 Se debe descargar la última versión del SDK desde el botón Download ZIP del branch master.
-Una vez descargado y descomprimido, se debe agregar la librería decidir.jar que se encuentra dentro de la carpeta dist, a las librerías del proyecto y en el codigo se debe agregar siguiente import.
+Una vez descargado y descomprimido, se debe agregar la librería decidir-android.jar que se encuentra dentro de la carpeta dist, a las librerías del proyecto y en el codigo se debe agregar siguiente import.
 
 ```java
 import com.android.decidir.sdk.Authenticate;
@@ -112,7 +112,7 @@ El token de pago puede ser generado de 2 formas como se muestra a continuaci&oac
 
 <a name="datostarjeta"></a>
 
-####Con datos de tarjeta
+#### Con datos de tarjeta
 
 Mediante este recurso, se genera una token de pago a partir de los datos de la tarjeta del cliente.
 
