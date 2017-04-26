@@ -7,7 +7,6 @@ Modulo para conexión con gateway de pago DECIDIR2
 + [Instalación](#instalacion)
 + [Versiones de Andrioid soportadas](#versionesdeandroidoportadas)
 + [Manual de Integración](#manualintegracion)
-+ [Diagrama de secuencia](#secuencia)
 + [Ambientes](#test)
 + [Uso](#uso)
 + [Inicializar la clase correspondiente al conector](#initconector)
@@ -40,16 +39,6 @@ La versi&oacute;n implementada de la SDK, est&aacute; testeada para versiones de
 ## Manual de Integración
 
 Se encuentra disponible en Gitbook el **[Manual de Integración Decidir2] (https://decidir.api-docs.io/1.0/guia-de-inicio/)** para su consulta online, en este detalla el proceso de integración. En el mismo se explican los servicios y operaciones disponibles, con ejemplos de requerimientos y respuestas, aquí sólo se ejemplificará la forma de llamar a los distintos servicios usando la presente SDK.
-
-[<sub>Volver a inicio</sub>](#inicio)
-
-<a name="secuencia"></a>
-
-## Diagrama de secuencia
-El SDK-Android permite generar, desde el dispositivo mobile, un token de pago con los datos de la tarjeta del cliente. &Eacute;ste se deber&aacute; enviar luego al backend del comercio para realizar la transacci&oacute;n de pago correpondiente.
-Encapsula la `Solicitud de Pago` y `Step1` que se muestra en el siguiente diagrama de flujo de un pago a trav&eacute;s de la RESTful API.
-
-![imagen de configuracion](http://developers.decidir-demo.com/assets/img/api-docs/api_flow_chart_es.png)</br>
 
 [<sub>Volver a inicio</sub>](#inicio)
 
@@ -106,6 +95,9 @@ Authenticate decidirAuthenticate = new Authenticate(publicApiKey);
 <a name="authenticate"></a>
 
 ### Generaci&oacute;n de Token de Pago
+
+El SDK-Android permite generar, desde el dispositivo mobile, un token de pago con los datos de la tarjeta del cliente. &Eacute;ste se deber&aacute; enviar luego al backend del comercio para realizar la transacci&oacute;n de pago correpondiente.
+
 El token de pago puede ser generado de 2 formas como se muestra a continuaci&oacute;n.
 
 [<sub>Volver a inicio</sub>](#inicio)
