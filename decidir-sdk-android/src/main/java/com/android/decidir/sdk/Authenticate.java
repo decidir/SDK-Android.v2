@@ -17,7 +17,7 @@ import com.android.decidir.sdk.services.AuthenticateService;
  */
 public class Authenticate {
 
-    private static String apiUrl = "https://live.decidir.com/api";
+    private static String apiUrl = "https://live.decidir.com/api/v1";
     private static Integer timeOut = 2;
     private AuthenticateService authenticateService;
 
