@@ -35,7 +35,7 @@ public class Authenticate {
             this.timeOut =timeOut;
         }
         this.authenticateService = AuthenticateService.getInstance(
-                DecidirConfiguration.(secretAccessToken, this.apiUrl, this.timeOut, AuthenticateApi.class),
+                DecidirConfiguration.initRetrofit(secretAccessToken, this.apiUrl, this.timeOut, AuthenticateApi.class),
                 DecidirConfiguration.initRetrofit(secretAccessToken, this.apiUrl, this.timeOut, FraudDetectionApi.class));
     }
 
