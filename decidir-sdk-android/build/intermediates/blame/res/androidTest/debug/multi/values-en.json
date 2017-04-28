@@ -1,0 +1,159 @@
+[
+    {
+        "outputFile": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-en/values-en.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 56,
+                    "endOffset": 107
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 56,
+                        "endOffset": 107
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 112,
+                    "endColumn": 88,
+                    "endOffset": 196
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 112,
+                        "endColumn": 88,
+                        "endOffset": 196
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 201,
+                    "endColumn": 67,
+                    "endOffset": 264
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 201,
+                        "endColumn": 67,
+                        "endOffset": 264
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 269,
+                    "endColumn": 86,
+                    "endOffset": 351
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 269,
+                        "endColumn": 86,
+                        "endOffset": 351
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 356,
+                    "endColumn": 78,
+                    "endOffset": 430
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 356,
+                        "endColumn": 78,
+                        "endOffset": 430
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 435,
+                    "endColumn": 68,
+                    "endOffset": 499
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 435,
+                        "endColumn": 68,
+                        "endOffset": 499
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 504,
+                    "endColumn": 62,
+                    "endOffset": 562
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 504,
+                        "endColumn": 62,
+                        "endOffset": 562
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 567,
+                    "endColumn": 64,
+                    "endOffset": 627
+                },
+                "from": {
+                    "file": "/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/build/intermediates/bundles/debug/res/values-en/values-en.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 567,
+                        "endColumn": 64,
+                        "endOffset": 627
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
 
 android {
     lintOptions {
@@ -30,7 +31,10 @@ android {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
+    maven {
+        url "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android-snapshot/"
+    }
 }
 
 dependencies {
@@ -41,7 +45,17 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
+}
 
-    //testCompile 'com.android.support.test:runner:0.2'
-    //testCompile 'com.android.support.test:rules:0.2'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android-snapshot/") {
+                authentication(userName: "admin", password: "R3dB33575")
+                pom.groupId = "com.decidir.api"
+                pom.artifactId = "decidir-sdk-android"
+                pom.version = '0.0.1'
+            }
+        }
+    }
 }

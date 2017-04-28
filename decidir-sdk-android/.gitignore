@@ -1,1 +1,8 @@
-/build
+build/generated
+build/intermediated
+build/poms
+build/publications
+build/reports
+build/test-results
+build/tmp
+ivy.xml

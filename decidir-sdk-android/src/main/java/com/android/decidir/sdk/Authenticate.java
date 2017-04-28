@@ -57,7 +57,7 @@ public class Authenticate {
     }
 
     /**
-     * Authenticate without token
+     * Create Payment Token without card token
      * @param authenticationWithoutToken
      * @param context
      * @param withCybersource
@@ -65,12 +65,12 @@ public class Authenticate {
      * @return a {@link AuthenticationResponse} with the {@link AuthenticationResponse}
      * @throws DecidirException when an error ocurrs
      */
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithoutToken authenticationWithoutToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
+    public DecidirResponse<AuthenticationResponse> createPaymentToken(AuthenticationWithoutToken authenticationWithoutToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
         return authenticateService.authenticate(authenticationWithoutToken, context, withCybersource, profilingTimeoutSecs);
     }
 
     /**
-     * Authenticate with token
+     * Create Payment Token  with card token
      * @param authenticationWithToken
      * @param context
      * @param withCybersource
@@ -78,7 +78,7 @@ public class Authenticate {
      * @return a {@link AuthenticationResponse} with the {@link AuthenticationResponse}
      * @throws DecidirException when an error ocurrs
      */
-    public DecidirResponse<AuthenticationResponse> authenticate(AuthenticationWithToken authenticationWithToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
+    public DecidirResponse<AuthenticationResponse> createPaymentTokenWithCardToken(AuthenticationWithToken authenticationWithToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
         return authenticateService.authenticate(authenticationWithToken, context, withCybersource, profilingTimeoutSecs);
     }
 }

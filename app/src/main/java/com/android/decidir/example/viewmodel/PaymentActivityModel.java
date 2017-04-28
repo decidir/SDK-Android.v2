@@ -20,13 +20,14 @@ import com.decidir.sdk.Decidir;
 import com.decidir.sdk.dto.Channel;
 import com.decidir.sdk.dto.Currency;
 import com.decidir.sdk.dto.CustomerInSite;
+import com.decidir.sdk.dto.Item;
 import com.decidir.sdk.dto.Payment;
 import com.decidir.sdk.dto.PaymentNoPciRequest;
 import com.decidir.sdk.dto.PaymentResponse;
+import com.decidir.sdk.dto.PaymentType;
 import com.decidir.sdk.dto.PurchaseTotals;
 import com.decidir.sdk.dto.SubPayment;
 import com.decidir.sdk.dto.TicketingFraudDetectionData;
-import com.decidir.sdk.dto.TicketingTItem;
 import com.decidir.sdk.dto.TicketingTransactionData;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -49,7 +50,7 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         Boolean withCybersource = verticalCS != 0;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithoutToken, DecidirApp.getAppContext(), withCybersource, 30);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.createPaymentToken(authenticationWithoutToken, DecidirApp.getAppContext(), withCybersource, 30);
         PaymentNoPciRequest payment = getPayment(responseAuthentication.getResult(), installments);
         payment.setUser_id(userId);
         switch (verticalCS){
@@ -71,7 +72,7 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         Boolean withCybersource = verticalCS != 0;
         Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.authenticate(authenticationWithToken, DecidirApp.getAppContext(), withCybersource, 30);
+        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.createPaymentTokenWithCardToken(authenticationWithToken, DecidirApp.getAppContext(), withCybersource, 30);
         PaymentNoPciRequest payment = getPayment(responseAuthentication.getResult(), installments);
         switch (verticalCS){
             case 1: {
@@ -96,7 +97,7 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         payment.setAmount(2L);
         payment.setCurrency(Currency.ARS);
         payment.setInstallments(installments);
-        payment.setPayment_type("single");
+        payment.setPayment_type(PaymentType.SINGLE);
         payment.setSub_payments(new ArrayList<SubPayment>());
         return payment;
     }
@@ -113,7 +114,6 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         billingData.setPostal_code("1427");
         billingData.setState("BA");
         billingData.setStreet1("Thames 677");
-        billingData.setIp_address("127.0.0.1");
 
         TicketingFraudDetectionData fraudDetection = new TicketingFraudDetectionData();
         fraudDetection.setBill_to(billingData);
@@ -133,8 +133,8 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         TicketingTransactionData ticketingTransactionData = new TicketingTransactionData();
         ticketingTransactionData.setDays_to_event(55);
         ticketingTransactionData.setDelivery_type("Pick up");
-        List<TicketingTItem> items = new ArrayList<>();
-        TicketingTItem ticketingTItem = new TicketingTItem();
+        List<Item> items = new ArrayList<>();
+        Item ticketingTItem = new Item();
         ticketingTItem.setCode("popblacksabbat2016");
         ticketingTItem.setDescription("Popular Black Sabbath 2016");
         ticketingTItem.setName("popblacksabbat2016ss");
