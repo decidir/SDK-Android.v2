@@ -171,6 +171,7 @@ datos.setSecurity_code("123"); // CVV. OPCIONAL
 datos.setCard_expiration_month("03"); //Mes de vencimiento [01-12]. MANDATORIO
 datos.setCard_expiration_year("19");//Año de vencimiento[00-99]. MANDATORIO
 datos.setCard_holder_name("TITULAR"); //Nombre del titular tal como aparece en la tarjeta. MANDATORIO
+
 CardHolderIdentification idTitular = new CardHolderIdentification(); //Identificacion del titular de la tarjeta. Es opcional, pero debe estar completo si se agrega
 idTitular.setType("dni");//MANDATORIO
 idTitular.setNumber("12345678");//MANDATORIO
@@ -180,16 +181,17 @@ datos.setCard_holder_identification(idTitular); //OPCIONAL
 Context context = ... //Application context ( android.content.Context)
 Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por CyberSource
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
+
 try {
-DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude)
-// Procesamiento de respuesta de la generacion de token de pago
-// ...codigo...
+  DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude)
+  // Procesamiento de respuesta de la generacion de token de pago
+  // ...codigo...
 } catch (DecidirException de) {
-// Manejo de excepcion  de Decidir
- // ...codigo...
+  // Manejo de excepcion  de Decidir
+  // ...codigo...
 } catch (Exception e) {
- //Manejo de excepcion general
-// ...codigo...
+  //Manejo de excepcion general
+  // ...codigo...
 }
 //...codigo...
 ```
@@ -216,16 +218,17 @@ datos.setSecurity_code("123"); // CVV. OPCIONAL
 Context context = ... //Application context ( android.content.Context)
 Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por CyberSource
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
+
 try {
 DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude)
-// Procesamiento de respuesta de la generacion de token de pago
-// ...codigo...
+  // Procesamiento de respuesta de la generacion de token de pago
+  // ...codigo...
 } catch (DecidirException de) {
-// Manejo de excepcion  de Decidir
- // ...codigo...
+  // Manejo de excepcion  de Decidir
+  // ...codigo...
 } catch (Exception e) {
- //Manejo de excepcion general
-// ...codigo...
+  //Manejo de excepcion general
+  // ...codigo...
 }
 //...codigo...
 ```
