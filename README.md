@@ -9,7 +9,6 @@ Modulo para conexión con gateway de pago DECIDIR2
   + [Diagrama de secuencia](#secuencia)
 + [Instalación](#instalacion)
  + [Versiones de Andrioid soportadas](#versionesdeandroidoportadas)
-  + [Manual de Integración](#manualintegracion)
   + [Ambientes](#environments)
 + [Uso](#uso)
   + [Inicializar la clase correspondiente al conector](#initconector)
@@ -82,14 +81,6 @@ import com.android.decidir.sdk.exceptions.*;
 <a name="versionesdeandroidsoportadas"></a>
 ### Versiones de Android soportadas
 La versi&oacute;n implementada de la SDK, est&aacute; testeada para versiones desde API Level 14 (Android version >= 4.0)
-
-[<sub>Volver a inicio</sub>](#inicio)
-
-<a name="manualintegracion"></a>
-
-## Manual de Integración
-
-Se encuentra disponible en Gitbook el **[Manual de Integración Decidir2] (https://decidir.api-docs.io/1.0/guia-de-inicio/)** para su consulta online, en este detalla el proceso de integración. En el mismo se explican los servicios y operaciones disponibles, con ejemplos de requerimientos y respuestas, aquí sólo se ejemplificará la forma de llamar a los distintos servicios usando la presente SDK.
 
 [<sub>Volver a inicio</sub>](#inicio)
 
