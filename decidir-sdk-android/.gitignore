@@ -1,8 +1,6 @@
-build/generated
-build/intermediated
-build/poms
-build/publications
-build/reports
-build/test-results
-build/tmp
-ivy.xml
+build*
+!build/outputs
+build/outputs*
+!build/outputs/aar
+build/outputs/aar*
+!build/outputs/aar/decidir-sdk-android-release.aar
