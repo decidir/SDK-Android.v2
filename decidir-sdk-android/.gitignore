@@ -1,6 +1,4 @@
-build*
-!build/outputs
-build/outputs*
-!build/outputs/aar
-build/outputs/aar*
+build/*
 !build/outputs/aar/decidir-sdk-android-release.aar
+
+
