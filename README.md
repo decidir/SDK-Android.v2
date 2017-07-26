@@ -8,17 +8,16 @@ Modulo para conexión con gateway de pago DECIDIR2
   + [Alcance](#scope)
   + [Diagrama de secuencia](#secuencia)
 + [Instalación](#instalacion)
- + [Versiones de Andrioid soportadas](#versionesdeandroidoportadas)
-  + [Ambientes](#environments)
+  + [Versiones de Andrioid soportadas](#versionesdeandroidoportadas)
+ + [Ambientes](#environments)
 + [Uso](#uso)
   + [Inicializar la clase correspondiente al conector](#initconector)
-  + [Device fingerprinter](#device)
   + [Operatoria del Gateway](#operatoria)
     + [Generaci&oacute;n de Token de Pago](#authenticate)
      +  [Con datos de tarjeta](#datostarjeta)
      +  [Con tarjeta tokenizada](#tokentarjeta)
-
-
+  + [Integración con Cybersource](#cybersource)
+     + [Device fingerprinter](#device)
 <a name="introduccion"></a>
 ## Introducción
 El flujo de una transacción a través de las **sdks** consta de dos pasos, la **generaci&oacute;n de un token de pago** por parte del cliente y el **procesamiento de pago** por parte del comercio. Existen sdks espec&iacute;ficas para realizar estas funciones en distintos lenguajes que se detallan a continuaci&oacute;n:
@@ -128,18 +127,6 @@ String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
 Authenticate decidir = new Authenticate(publicApiKey);
 //...codigo...
 ```
-
-[<sub>Volver a inicio</sub>](#inicio)
-
-
-<a name="device"></a>
-
-## Device FingerPrint
-El **Device Fingerprint (DF)** es la huella digital del dispositivo que realiza la transacción. 
-Es un dato muy importante que se tiene en cuenta en el proceso de validación
-Para acceder a la documentación: 
-https://decidir.api-docs.io/1.0/prevencion-de-fraude-by-cybersource/cs_device_fingerprint
-
 
 [<sub>Volver a inicio</sub>](#inicio)
 
@@ -256,5 +243,15 @@ DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentTokenWi
 
 Para utilizar el Servicio de Control de Fraude Cybersource, debe indicarse en un par&aacute;metro al momento de invocar el servicio de generaci&oacute;n de token de pago.
 [Ver ejemplo](#tokentarjeta)
+
+[<sub>Volver a inicio</sub>](#inicio)
+<a name="device"></a>
+
+## Device FingerPrint
+El **Device Fingerprint (DF)** es la huella digital del dispositivo que realiza la transacción. 
+Es un dato muy importante que se tiene en cuenta en el proceso de validación
+Para acceder a la documentación: 
+https://decidir.api-docs.io/1.0/prevencion-de-fraude-by-cybersource/cs_device_fingerprint
+
 
 [<sub>Volver a inicio</sub>](#inicio)
