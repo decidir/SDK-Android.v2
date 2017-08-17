@@ -269,7 +269,7 @@ customer.setIdentification(idTitular); //OPCIONAL
 datos.setCustomer(customer);//MANDATORIO
 
 try {
-DecidirResponse<PaymentTokenResponse> respuesta = decidir.createOfflinePaymentToken(datos)
+DecidirResponse<OfflinePaymentTokenResponse> respuesta = decidir.createOfflinePaymentToken(datos)
   // Procesamiento de respuesta de la generacion de token de pago
   // ...codigo...
 } catch (DecidirException de) {
