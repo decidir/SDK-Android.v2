@@ -1,23 +1,26 @@
 package com.android.decidir.sdk.dto;
 
+import com.android.decidir.sdk.utils.JsonUTCDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by biandra on 04/08/16.
  */
-public class AuthenticationResponse implements Serializable {
+public class PaymentTokenResponse implements Serializable {
 
     private String id;
     private String status;
-    private String date_used;
     private Integer card_number_length;
-    private String date_created;
+    private Date date_created;
     private String bin;
     private String last_four_digits;
     private Integer security_code_length;
     private Integer expiration_month;
     private Integer expiration_year;
-    private String date_due;
+    private Date date_due;
     private CardholderData cardholder;
 
     public String getId() {
@@ -36,14 +39,6 @@ public class AuthenticationResponse implements Serializable {
         this.status = status;
     }
 
-    public String getDate_used() {
-        return date_used;
-    }
-
-    public void setDate_used(String date_used) {
-        this.date_used = date_used;
-    }
-
     public Integer getCard_number_length() {
         return card_number_length;
     }
@@ -52,11 +47,12 @@ public class AuthenticationResponse implements Serializable {
         this.card_number_length = card_number_length;
     }
 
-    public String getDate_created() {
+    @JsonDeserialize(using = JsonUTCDateDeserializer.class)
+    public Date getDate_created() {
         return date_created;
     }
 
-    public void setDate_created(String date_created) {
+    public void setDate_created(Date date_created) {
         this.date_created = date_created;
     }
 
@@ -99,11 +95,13 @@ public class AuthenticationResponse implements Serializable {
     public void setExpiration_year(Integer expiration_year) {
         this.expiration_year = expiration_year;
     }
-    public String getDate_due() {
+
+    @JsonDeserialize(using = JsonUTCDateDeserializer.class)
+    public Date getDate_due() {
         return date_due;
     }
 
-    public void setDate_due(String date_due) {
+    public void setDate_due(Date date_due) {
         this.date_due = date_due;
     }
 

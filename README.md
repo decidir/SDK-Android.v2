@@ -73,7 +73,7 @@ Se debe descargar la última versión del SDK desde el botón Download ZIP del b
 Una vez descargado y descomprimido, se debe agregar la librería `decidir-sdk-android-release.aar` que se encuentra dentro de la carpeta`./decidir-sdk-android/build/outputs/aar`, a las librerías del proyecto y en el codigo se debe agregar siguiente import.
 
 ```java
-import com.android.decidir.sdk.Authenticate;
+import com.android.decidir.sdk.DecidirPaymentToken;
 import com.android.decidir.sdk.dto.*;
 import com.android.decidir.sdk.exceptions.*;
 ```
@@ -92,7 +92,7 @@ La **sdk Android**  permite trabajar con los ambientes de Sandbox y Producc&oacu
 El ambiente se debe instanciar indicando su URL.
 
 ```java
-import com.android.decidir.sdk.Authenticate;
+import com.android.decidir.sdk.DecidirPaymentToken;
 
 public class MiClase {
 String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";

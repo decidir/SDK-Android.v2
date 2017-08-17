@@ -7,14 +7,14 @@ import java.io.Serializable;
  */
 public class Identification implements Serializable {
 
-    private String type;
+    private IdentificationType type;
     private String number;
 
-    public String getType() {
+    public IdentificationType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(IdentificationType type) {
         this.type = type;
     }
 

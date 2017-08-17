@@ -2,10 +2,10 @@ package com.android.decidir.sdk;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
+import com.android.decidir.sdk.dto.PaymentToken;
 import com.android.decidir.sdk.dto.CardHolderIdentification;
 import com.android.decidir.sdk.dto.PaymentError;
-import com.android.decidir.sdk.validaters.AuthenticationValidator;
+import com.android.decidir.sdk.validaters.PaymentTokenValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,7 +31,7 @@ public class AuthenticationValidatorTests {
 
     @Test
     public void authenticationWithoutTokenValid() {
-        AuthenticationWithoutToken authentication = new AuthenticationWithoutToken();
+        PaymentToken authentication = new PaymentToken();
         authentication.setCard_expiration_month("02");
         authentication.setCard_expiration_year("22");
         authentication.setCard_holder_name("Biandra");
@@ -45,7 +45,7 @@ public class AuthenticationValidatorTests {
         when(context.getResources()).thenReturn(resources);
         //when(resources.getString(anyInt())).thenReturn("error");
 
-        AuthenticationValidator validator = new AuthenticationValidator();
+        PaymentTokenValidator validator = new PaymentTokenValidator();
         Map<PaymentError, String> result = validator.validate(authentication, context);
 
         assert result.isEmpty();
@@ -53,7 +53,7 @@ public class AuthenticationValidatorTests {
 
     @Test
     public void authenticationWithoutTokenExpiratedDay() {
-        AuthenticationWithoutToken authentication = new AuthenticationWithoutToken();
+        PaymentToken authentication = new PaymentToken();
         authentication.setCard_expiration_month("02");
         authentication.setCard_expiration_year("15");
         authentication.setCard_holder_name("Biandra");
@@ -66,7 +66,7 @@ public class AuthenticationValidatorTests {
 
         when(context.getResources()).thenReturn(resources);
 
-        AuthenticationValidator validator = new AuthenticationValidator();
+        PaymentTokenValidator validator = new PaymentTokenValidator();
         Map<PaymentError, String> result = validator.validate(authentication, context);
 
         assert !result.isEmpty();

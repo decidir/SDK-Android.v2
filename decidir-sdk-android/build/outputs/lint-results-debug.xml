@@ -70,7 +70,7 @@ Therefore, you should either use the form of the SimpleDateFormat constructor wh
         errorLine2="                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/biandra/Desarrollo/repo/SPS001/DEC2-sdk-android/decidir-sdk-android/src/main/java/com/android/decidir/sdk/validaters/AuthenticationValidator.java"
-            line="76"
+            line="75"
             column="43"/>
     </issue>
 

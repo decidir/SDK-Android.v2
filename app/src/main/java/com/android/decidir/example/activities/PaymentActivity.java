@@ -14,14 +14,16 @@ import com.android.decidir.example.R;
 import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.PaymentActivityListener;
 import com.android.decidir.example.viewmodel.PaymentActivityModel;
-import com.android.decidir.sdk.dto.AuthenticationWithToken;
-import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
+import com.android.decidir.sdk.dto.IdentificationType;
+import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
+import com.android.decidir.sdk.dto.PaymentToken;
 import com.android.decidir.sdk.dto.CardHolderIdentification;
 import com.android.decidir.sdk.dto.PaymentError;
-import com.android.decidir.sdk.validaters.AuthenticationValidator;
+import com.android.decidir.sdk.validaters.PaymentTokenValidator;
 import com.decidir.sdk.dto.Payment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -68,7 +70,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
     View vPaymentRequestLoading;
 
     private String token;
-    private AuthenticationValidator validator;
+    private PaymentTokenValidator validator;
 
 
     @Override
@@ -86,7 +88,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
             onGetPaymentStartedWithTokenization(token);
         }
 
-        validator = new AuthenticationValidator();
+        validator = new PaymentTokenValidator();
     }
 
     @Override
@@ -141,7 +143,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
     @OnClick(R.id.bPayWithoutTokenization)
     public void payWithoutTokenization(){
-        final AuthenticationWithoutToken authentication = getAuthentication();
+        final PaymentToken authentication = getPaymentToken();
         Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
         if (validation.isEmpty()){
             PaymentActivityModel model = new PaymentActivityModel(this);
@@ -158,7 +160,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
 
     @OnClick(R.id.bPayWithTokenization)
     public void payWithTokenization(){
-        final AuthenticationWithToken authentication = getAuthenticationWithToken();
+        final PaymentTokenWithCardToken authentication = getPaymentTokenWithCardToken();
         Map<PaymentError, String> validation = validator.validate(authentication, getApplicationContext());
         if (validation.isEmpty()){
             PaymentActivityModel model = new PaymentActivityModel(this);
@@ -168,19 +170,19 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
                 add(spinnerCSWithToken.getSelectedItemPosition());
             }});
         } else {
-            showErrors(authentication, validation);
+            showErrors(validation);
         }
     }
 
-    private void showErrors(AuthenticationWithToken authentication, Map<PaymentError, String> validation) {
+    private void showErrors(Map<PaymentError, String> validation) {
         etSecurityCodeWithTokenization.setError(validation.get(PaymentError.SECURITY_CODE));
     }
 
-    private void showErrors(AuthenticationWithoutToken authentication, Map<PaymentError, String> validation) {
+    private void showErrors(PaymentToken paymentToken, Map<PaymentError, String> validation) {
         etCreditCardNumber.setError(validation.get(PaymentError.CARD_NUMBER));
         etName.setError(validation.get(PaymentError.CARD_HOLDER_NAME));
         etSecurityCode.setError(validation.get(PaymentError.SECURITY_CODE));
-        etDocumentNumber.setError(validation.get(PaymentError.DNI));
+        etDocumentNumber.setError(validation.get(PaymentError.TYPE_ID));
         etExpirationMonth.setError(validation.get(PaymentError.CARD_EXPIRATION_MONTH));
         etExpirationYear.setError(validation.get(PaymentError.CARD_EXPIRATION_YEAR));
         if (validation.get(PaymentError.CARD_EXPIRATION) != null){
@@ -193,25 +195,27 @@ public class PaymentActivity extends AppCompatActivity implements PaymentActivit
         this.finish();
     }
 
-    public AuthenticationWithoutToken getAuthentication() {
-        AuthenticationWithoutToken authenticationWithoutToken = new AuthenticationWithoutToken();
-        authenticationWithoutToken.setCard_number(etCreditCardNumber.getText().toString());
-        authenticationWithoutToken.setCard_expiration_month(etExpirationMonth.getText().toString());
-        authenticationWithoutToken.setCard_expiration_year(etExpirationYear.getText().toString());
-        authenticationWithoutToken.setSecurity_code(etSecurityCode.getText().toString());
-        authenticationWithoutToken.setCard_holder_name(etName.getText().toString());
+    public PaymentToken getPaymentToken() {
+        PaymentToken paymentToken = new PaymentToken();
+        paymentToken.setCard_number(etCreditCardNumber.getText().toString());
+        paymentToken.setCard_expiration_month(etExpirationMonth.getText().toString());
+        paymentToken.setCard_expiration_year(etExpirationYear.getText().toString());
+        paymentToken.setSecurity_code(etSecurityCode.getText().toString());
+        paymentToken.setCard_holder_name(etName.getText().toString());
         CardHolderIdentification cardHolderIdentification = new CardHolderIdentification();
         cardHolderIdentification.setNumber(etDocumentNumber.getText().toString());
-        cardHolderIdentification.setType(sDocumentType.getItemAtPosition(sDocumentType.getSelectedItemPosition()).toString());//TODO: cambiar a enum
+        cardHolderIdentification.setType(IdentificationType.DNI);//sDocumentType.getItemAtPosition(sDocumentType.getSelectedItemPosition()).toString());//TODO: cambiar a enum
         cardHolderIdentification.setNumber(etDocumentNumber.getText().toString());
-        authenticationWithoutToken.setCard_holder_identification(cardHolderIdentification);
-        return authenticationWithoutToken;
+        paymentToken.setCard_holder_identification(cardHolderIdentification);
+        paymentToken.setCard_holder_birthday(new Date());
+        paymentToken.setCard_holder_door_number(3);
+        return paymentToken;
     }
 
-    public AuthenticationWithToken getAuthenticationWithToken() {
-        AuthenticationWithToken authenticationWithToken = new AuthenticationWithToken();
-        authenticationWithToken.setToken(this.token);
-        authenticationWithToken.setSecurity_code(etSecurityCodeWithTokenization.getText().toString());
-        return authenticationWithToken;
+    public PaymentTokenWithCardToken getPaymentTokenWithCardToken() {
+        PaymentTokenWithCardToken paymentTokenWithCardToken = new PaymentTokenWithCardToken();
+        paymentTokenWithCardToken.setToken(this.token);
+        paymentTokenWithCardToken.setSecurity_code(etSecurityCodeWithTokenization.getText().toString());
+        return paymentTokenWithCardToken;
     }
 }
