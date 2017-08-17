@@ -100,9 +100,9 @@ String urlDesarrollo = "https://developers.decidir.com/api/v1";
 String urlProduccion = "https://live.decidir.com/api/v1";
 int timeout = 2; //Expresado en segundos
 //Para el ambiente de desarrollo
-Authenticate decidirDesa = new Authenticate(publicApiKey, urlDesarrollo, timeout);
+DecidirPaymentToken decidirDesa = new DecidirPaymentToken(publicApiKey, urlDesarrollo, timeout);
 //Para el ambiente de produccion
-Authenticate decidirProd = new Authenticate(publicApiKey, urlProduccion, timeout);
+DecidirPaymentToken decidirProd = new DecidirPaymentToken(publicApiKey, urlProduccion, timeout);
 // ...codigo...
 }
 ```
@@ -114,7 +114,7 @@ Authenticate decidirProd = new Authenticate(publicApiKey, urlProduccion, timeout
 <a name="initconector"></a>
 ### Inicializar la clase correspondiente al conector.
 
-Instanciación de la clase `Authenticate`
+Instanciación de la clase `DecidirPaymentToken`
 
 La misma recibe como parámetros la public key provista por Decidir para el comercio y el ambiente en que se trabajar$aacute;.
 
@@ -124,7 +124,7 @@ La API Key será provista por el equipo de Soporte de DECIDIR (soporte@decidir.c
 // ...codigo...
 String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
 //Para el ambiente de produccion(default) usando public api key
-Authenticate decidir = new Authenticate(publicApiKey);
+DecidirPaymentToken decidir = new DecidirPaymentToken(publicApiKey);
 //...codigo...
 ```
 
@@ -157,25 +157,29 @@ Mediante este recurso, se genera una token de pago a partir de los datos de la t
 | card_expiration_year  |año de vto de tc   | SI  |  No debe ser anterior a la fecha (mes/año) del dia actual   | 17  |
 | security_code | codigo de seguridad  | NO  | Sin validacion  | 234  |
 | card_holder_name | titular (como figura en la tc)  | SI  | Mayor igual a 1 letra  | Valentin Santiago Gomez  |
-| type  |  tipo de documento | NO  | Sin validacion  | dni/DNI, cuil/CUIL  |
-| number  | nro de documento  | NO  |  Sin validacion | 23968498  |
+| card_holder_identification.type  |  tipo de documento | NO  | Sin validacion  | dni/DNI, cuil/CUIL  |
+| card_holder_identification.number  | nro de documento  | NO  |  Sin validacion | 23968498  |
 | device_unique_identifier  | identificador único del dispositivo  | NO  |  Sin validacion | 12345  |
+| card_holder_birthday  | fecha de nac. del titular  | NO  |  Date | Date  |
+| card_holder_door_number  | numero de puerta del titular  | NO  |  Sin validacion | 10  |
 
 ```java
 // ...codigo...
 String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
 //Para el ambiente de produccion(default) usando public api key
-Authenticate decidir = new Authenticate(publicApiKey);
+DecidirPaymentToken decidir = new DecidirPaymentToken(publicApiKey);
 //Datos de tarjeta
-AuthenticationWithoutToken datos = new AuthenticationWithoutToken();
+PaymentToken datos = new PaymentToken();
 datos.setCard_number("4509790112684851"); //Nro de ""tarjeta. MANDATORIO
 datos.setSecurity_code("123"); // CVV. OPCIONAL
 datos.setCard_expiration_month("03"); //Mes de vencimiento [01-12]. MANDATORIO
 datos.setCard_expiration_year("19");//Año de vencimiento[00-99]. MANDATORIO
 datos.setCard_holder_name("TITULAR"); //Nombre del titular tal como aparece en la tarjeta. MANDATORIO
+datos.setCard_holder_birthday(new Date()); //Fecha de nac del titular. OPCIONAL
+datos.setCard_holder_door_number(new Date()); //Nro de puerta del titular. OPCIONAL
 
 CardHolderIdentification idTitular = new CardHolderIdentification(); //Identificacion del titular de la tarjeta. Es opcional, pero debe estar completo si se agrega
-idTitular.setType("dni");//MANDATORIO
+idTitular.setType(IdentificationType.DNI);//MANDATORIO
 idTitular.setNumber("12345678");//MANDATORIO
 datos.setCard_holder_identification(idTitular); //OPCIONAL
 
@@ -185,7 +189,7 @@ Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
 try {
-  DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude)
+  DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude)
   // Procesamiento de respuesta de la generacion de token de pago
   // ...codigo...
 } catch (DecidirException de) {
@@ -210,9 +214,9 @@ Mediante este recurso, se genera una token de pago a partir una tarjeta tokeniza
 // ...codigo...
 String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
 //Para el ambiente de produccion(default) usando public api key
-Authenticate decidir = new Authenticate(publicApiKey);
+DecidirPaymentToken decidir = new DecidirPaymentToken(publicApiKey);
 //Datos de tarjeta tokenizada
-AuthenticationWithToken datos = new AuthenticationWithToken();
+PaymentTokenWithCardToken datos = new PaymentTokenWithCardToken();
 datos.setToken("f522e031-90cb-41ed-ba1f-46e813e8e789"); //Tarjeta tokenizada MANDATORIO
 datos.setSecurity_code("123"); // CVV. OPCIONAL
 
@@ -222,7 +226,7 @@ Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
 try {
-DecidirResponse<AuthenticationResponse> respuesta = decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude)
+DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude)
   // Procesamiento de respuesta de la generacion de token de pago
   // ...codigo...
 } catch (DecidirException de) {
