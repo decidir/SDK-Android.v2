@@ -194,7 +194,7 @@ document.getElementById(id+'Link').style.display = 'none';
 <body>
 <h1>Lint Report</h1>
 <div class="titleSeparator"></div>
-Check performed at Sun May 07 23:16:50 GMT 2017.<br/>
+Check performed at Thu Aug 03 09:58:03 ART 2017.<br/>
 2 errors and 5 warnings found:<br/><br/>
 <table class="overview">
 <tr><td></td><td class="categoryColumn"><a href="#Correctness">Correctness</a>
@@ -278,13 +278,13 @@ To fix this issue, set the <code>targetSdkVersion</code> to the highest availabl
 <div class="id"><a href="#" title="Return to top">SimpleDateFormat: Implied locale in date format</a><div class="issueSeparator"></div>
 </div>
 <div class="warningslist">
-<span class="location"><a href="../../src/main/java/com/android/decidir/sdk/validaters/AuthenticationValidator.java">../../src/main/java/com/android/decidir/sdk/validaters/AuthenticationValidator.java</a>:76</span>: <span class="message">To get local formatting use <code>getDateInstance()</code>, <code>getDateTimeInstance()</code>, or <code>getTimeInstance()</code>, or use <code>new SimpleDateFormat(String template, Locale locale)</code> with for example <code>Locale.US</code> for ASCII dates.</span><br /><pre class="errorlines">
-<span class="lineno">  73</span>             validation.put(PaymentError.CARD_EXPIRATION_YEAR, context.getResources().getString(R.string.card_expiration_year_validate));
-<span class="lineno">  74</span>         }
-<span class="lineno">  75</span>         if(validCEM &amp;&amp; validCEY){
-<span class="lineno">  76</span>             SimpleDateFormat dateFormat = <span class="errorspan">new SimpleDateFormat("MM/yyyy");</span>
-<span class="lineno">  77</span>             Calendar cal = Calendar.getInstance();
-<span class="lineno">  78</span>             try {
+<span class="location"><a href="../../src/main/java/com/android/decidir/sdk/validaters/AuthenticationValidator.java">../../src/main/java/com/android/decidir/sdk/validaters/AuthenticationValidator.java</a>:75</span>: <span class="message">To get local formatting use <code>getDateInstance()</code>, <code>getDateTimeInstance()</code>, or <code>getTimeInstance()</code>, or use <code>new SimpleDateFormat(String template, Locale locale)</code> with for example <code>Locale.US</code> for ASCII dates.</span><br /><pre class="errorlines">
+<span class="lineno">  72</span>             validation.put(PaymentError.CARD_EXPIRATION_YEAR, context.getResources().getString(R.string.card_expiration_year_validate));
+<span class="lineno">  73</span>         }
+<span class="lineno">  74</span>         if(validCEM &amp;&amp; validCEY){
+<span class="lineno">  75</span>             SimpleDateFormat dateFormat = <span class="errorspan">new SimpleDateFormat("MM/yyyy");</span>
+<span class="lineno">  76</span>             Calendar cal = Calendar.getInstance();
+<span class="lineno">  77</span>             try {
 </pre>
 </div>
 <div class="metadata">Priority: 6 / 10<br/>

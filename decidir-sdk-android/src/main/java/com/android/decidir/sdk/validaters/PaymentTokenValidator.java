@@ -1,11 +1,10 @@
 package com.android.decidir.sdk.validaters;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.android.decidir.sdk.R;
-import com.android.decidir.sdk.dto.AuthenticationWithToken;
-import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
+import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
+import com.android.decidir.sdk.dto.PaymentToken;
 import com.android.decidir.sdk.dto.PaymentError;
 
 import java.text.ParseException;
@@ -20,7 +19,7 @@ import java.util.Map;
 /**
  * Created by biandra on 30/09/16.
  */
-public class AuthenticationValidator {
+public class PaymentTokenValidator {
 
     public static final String VISA = "visa";
     public static final String MASTERCARD = "mastercard";
@@ -40,20 +39,21 @@ public class AuthenticationValidator {
     public static final String NARANJA = "naranja";
     private Context context;
 
-    public Map<PaymentError, String> validate(AuthenticationWithoutToken authentication, Context context){
+    public Map<PaymentError, String> validate(PaymentToken paymentToken, Context context){
         this.context = context;
         Map<PaymentError, String> validation = new HashMap<>();
-        creditCardNumberValidator(authentication.getCard_number(), validation);
-        cvcValidate(authentication.getSecurity_code(), validation);
-        expiryDateValidator(authentication.getCard_expiration_month(), authentication.getCard_expiration_year(), validation);
-        cardHolderNameValidator(authentication.getCard_holder_name(), validation);
-        dniValidator(authentication.getCard_holder_identification().getNumber(), validation);
+        creditCardNumberValidator(paymentToken.getCard_number(), validation);
+        cvcValidate(paymentToken.getSecurity_code(), validation);
+        expiryDateValidator(paymentToken.getCard_expiration_month(), paymentToken.getCard_expiration_year(), validation);
+        cardHolderNameValidator(paymentToken.getCard_holder_name(), validation);
+        typeIdValidator(paymentToken.getCard_holder_identification().getNumber(), validation);
+        portNumberValidate(paymentToken.getCard_holder_door_number(), validation);
         return validation;
     }
 
-    private void dniValidator(String dni, Map<PaymentError, String> validation) {
-        if (!matcheNumber(dni)) {
-            validation.put(PaymentError.DNI, context.getResources().getString(R.string.dni_validate));
+    private void typeIdValidator(String numberId, Map<PaymentError, String> validation) {
+        if (!matcheNumber(numberId)) {
+            validation.put(PaymentError.TYPE_ID, context.getResources().getString(R.string.dni_validate));
         }
     }
 
@@ -120,10 +120,10 @@ public class AuthenticationValidator {
         return null;
     }
 
-    public Map<PaymentError, String> validate(AuthenticationWithToken authentication, Context context){
+    public Map<PaymentError, String> validate(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context){
         this.context = context;
         Map<PaymentError, String> validation = new HashMap<>();
-        cvcValidate(authentication.getSecurity_code(), validation);
+        cvcValidate(paymentTokenWithCardToken.getSecurity_code(), validation);
         return validation;
     }
 
@@ -131,6 +131,12 @@ public class AuthenticationValidator {
         if (!matcheNumber(securityCode)) {
             validation.put(PaymentError.SECURITY_CODE, context.getResources().getString(R.string.cvc_validate));
         }
+    }
+
+    private void portNumberValidate(Integer portNumber, Map<PaymentError, String> validation) {
+        /*if (portNumber != null && portNumber.length() > 6){
+            validation.put(PaymentError.PORT_NUMBER, context.getResources().getString(R.string.port_number_validate));
+        }*/
     }
 
     private boolean matcheNumber(String value){

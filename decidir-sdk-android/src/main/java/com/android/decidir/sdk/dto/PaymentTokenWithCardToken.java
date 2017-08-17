@@ -3,7 +3,7 @@ package com.android.decidir.sdk.dto;
 /**
  * Created by biandra on 24/09/16.
  */
-public class AuthenticationWithToken extends Authentication {
+public class PaymentTokenWithCardToken extends CommonPayToken {
 
     private String token;
 

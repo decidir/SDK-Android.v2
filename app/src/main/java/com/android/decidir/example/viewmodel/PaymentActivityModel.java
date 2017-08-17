@@ -6,29 +6,31 @@ import com.android.decidir.example.Constants;
 import com.android.decidir.example.DecidirApp;
 import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.PaymentActivityListener;
-import com.android.decidir.sdk.Authenticate;
-import com.android.decidir.sdk.dto.AuthenticationWithToken;
+import com.android.decidir.sdk.DecidirPaymentToken;
+import com.android.decidir.sdk.dto.DecidirResponse;
+import com.android.decidir.sdk.dto.PaymentToken;
+import com.android.decidir.sdk.dto.PaymentTokenResponse;
+import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
 import com.android.decidir.sdk.exceptions.ApiException;
 import com.android.decidir.sdk.exceptions.DecidirException;
 import com.android.decidir.sdk.exceptions.NotFoundException;
 import com.android.decidir.sdk.exceptions.ValidateException;
-import com.android.decidir.sdk.dto.AuthenticationWithoutToken;
-import com.android.decidir.sdk.dto.AuthenticationResponse;
-import com.android.decidir.sdk.dto.DecidirResponse;
-import com.decidir.sdk.dto.BillingData;
 import com.decidir.sdk.Decidir;
+import com.decidir.sdk.dto.BillingData;
 import com.decidir.sdk.dto.Channel;
 import com.decidir.sdk.dto.Currency;
+import com.decidir.sdk.dto.Customer;
 import com.decidir.sdk.dto.CustomerInSite;
 import com.decidir.sdk.dto.Item;
 import com.decidir.sdk.dto.Payment;
-import com.decidir.sdk.dto.PaymentNoPciRequest;
+import com.decidir.sdk.dto.PaymentRequest;
 import com.decidir.sdk.dto.PaymentResponse;
 import com.decidir.sdk.dto.PaymentType;
 import com.decidir.sdk.dto.PurchaseTotals;
 import com.decidir.sdk.dto.SubPayment;
 import com.decidir.sdk.dto.TicketingFraudDetectionData;
 import com.decidir.sdk.dto.TicketingTransactionData;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -46,20 +48,22 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         this.view = view;
     }
 
-    public Payment pay(AuthenticationWithoutToken authenticationWithoutToken, int installments, int verticalCS, String userId){
+    public Payment pay(PaymentToken paymentToken, int installments, int verticalCS, String userId){
         Boolean withCybersource = verticalCS != 0;
-        Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
+        DecidirPaymentToken decidirPaymentToken = new DecidirPaymentToken(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.createPaymentToken(authenticationWithoutToken, DecidirApp.getAppContext(), withCybersource, 30);
-        PaymentNoPciRequest payment = getPayment(responseAuthentication.getResult(), installments);
-        payment.setUser_id(userId);
+        DecidirResponse<PaymentTokenResponse> paymentTokenResponse = decidirPaymentToken.createPaymentToken(paymentToken, DecidirApp.getAppContext(), withCybersource, 30);
+        PaymentRequest payment = getPayment(paymentTokenResponse.getResult(), installments);
+        Customer customer = new Customer();
+        customer.setId(userId);
+        payment.setCustomer(customer);
         switch (verticalCS){
             case 1: {
-                payment.setFraud_detection(getTicketingVertical(authenticationWithoutToken.getFraud_detection().getDevice_unique_identifier()));
+                payment.setFraud_detection(getTicketingVertical(paymentToken.getFraud_detection().getDevice_unique_identifier()));
                 break;
             }
             case 2: {
-                payment.setFraud_detection(getTicketingVertical(authenticationWithoutToken.getFraud_detection().getDevice_unique_identifier()));
+                payment.setFraud_detection(getTicketingVertical(paymentToken.getFraud_detection().getDevice_unique_identifier()));
                 break;
             }
         }
@@ -68,19 +72,19 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
     }
 
 
-    public Payment pay(AuthenticationWithToken authenticationWithToken, int installments, int verticalCS){
+    public Payment pay(PaymentTokenWithCardToken paymentTokenWithCardToken, int installments, int verticalCS){
         Boolean withCybersource = verticalCS != 0;
-        Authenticate authenticate = new Authenticate(Constants.PUBLIC_API_KEY, Constants.URL, 10);
+        DecidirPaymentToken decidirPaymentToken = new DecidirPaymentToken(Constants.PUBLIC_API_KEY, Constants.URL, 10);
         Decidir decidir = new Decidir(Constants.PRIVATE_API_KEY, Constants.URL, 20);
-        DecidirResponse<AuthenticationResponse> responseAuthentication = authenticate.createPaymentTokenWithCardToken(authenticationWithToken, DecidirApp.getAppContext(), withCybersource, 30);
-        PaymentNoPciRequest payment = getPayment(responseAuthentication.getResult(), installments);
+        DecidirResponse<PaymentTokenResponse> paymentTokenResponse = decidirPaymentToken.createPaymentTokenWithCardToken(paymentTokenWithCardToken, DecidirApp.getAppContext(), withCybersource, 30);
+        PaymentRequest payment = getPayment(paymentTokenResponse.getResult(), installments);
         switch (verticalCS){
             case 1: {
-                payment.setFraud_detection(getTicketingVertical(authenticationWithToken.getFraud_detection().getDevice_unique_identifier()));
+                payment.setFraud_detection(getTicketingVertical(paymentTokenWithCardToken.getFraud_detection().getDevice_unique_identifier()));
                 break;
             }
             case 2: {
-                payment.setFraud_detection(getTicketingVertical(authenticationWithToken.getFraud_detection().getDevice_unique_identifier()));
+                payment.setFraud_detection(getTicketingVertical(paymentTokenWithCardToken.getFraud_detection().getDevice_unique_identifier()));
                 break;
             }
         }
@@ -88,12 +92,12 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         return responsePayment.getResult();
     }
 
-    private PaymentNoPciRequest getPayment(AuthenticationResponse authenticationResponse, int installments) {
-        PaymentNoPciRequest payment = new PaymentNoPciRequest();
+    private PaymentRequest getPayment(PaymentTokenResponse paymentTokenResponse, int installments) {
+        PaymentRequest payment = new PaymentRequest();
         payment.setSite_transaction_id(String.valueOf(GregorianCalendar.getInstance().getTimeInMillis()));
-        payment.setToken(authenticationResponse.getId());
+        payment.setToken(paymentTokenResponse.getId());
         payment.setPayment_method_id(1);
-        payment.setBin(authenticationResponse.getBin());
+        payment.setBin(paymentTokenResponse.getBin());
         payment.setAmount(2L);
         payment.setCurrency(Currency.ARS);
         payment.setInstallments(installments);
@@ -116,6 +120,7 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
         billingData.setStreet1("Thames 677");
 
         TicketingFraudDetectionData fraudDetection = new TicketingFraudDetectionData();
+        fraudDetection.setSend_to_cs(false);
         fraudDetection.setBill_to(billingData);
         PurchaseTotals purchaseTotals = new PurchaseTotals();
         purchaseTotals.setAmount(2L);
@@ -152,10 +157,10 @@ public class PaymentActivityModel extends AsyncTask<ArrayList<Object>, Void, Pay
     @Override
     protected Payment doInBackground(ArrayList<Object>... params) {
         try {
-            if (params[0].get(0) instanceof AuthenticationWithoutToken) {
-                return pay((AuthenticationWithoutToken) params[0].get(0), Integer.parseInt((String) params[0].get(1)), (Integer) params[0].get(2), (String) params[0].get(3));
-            } else if (params[0].get(0) instanceof AuthenticationWithToken) {
-                return pay((AuthenticationWithToken) params[0].get(0), Integer.parseInt((String) params[0].get(1)), (Integer) params[0].get(2));
+            if (params[0].get(0) instanceof PaymentToken) {
+                return pay((PaymentToken) params[0].get(0), Integer.parseInt((String) params[0].get(1)), (Integer) params[0].get(2), (String) params[0].get(3));
+            } else if (params[0].get(0) instanceof PaymentTokenWithCardToken) {
+                return pay((PaymentTokenWithCardToken) params[0].get(0), Integer.parseInt((String) params[0].get(1)), (Integer) params[0].get(2));
             }
         }
         catch (ApiException apiException){
