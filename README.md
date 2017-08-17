@@ -140,13 +140,13 @@ DecidirPaymentToken decidir = new DecidirPaymentToken(publicApiKey);
 
 El SDK-Android permite generar, desde el dispositivo mobile, un token de pago con los datos de la tarjeta del cliente. &Eacute;ste se deber&aacute; enviar luego al backend del comercio para realizar la transacci&oacute;n de pago correpondiente.
 
-El token de pago puede ser generado de 2 formas como se muestra a continuaci&oacute;n.
+El token de pago puede ser generado de 3 formas como se muestra a continuaci&oacute;n.
 
 [<sub>Volver a inicio</sub>](#inicio)
 
 <a name="datostarjeta"></a>
 
-#### Con datos de tarjeta
+#### Token para pagos Online
 
 Mediante este recurso, se genera una token de pago a partir de los datos de la tarjeta del cliente.
 
@@ -176,7 +176,7 @@ datos.setCard_expiration_month("03"); //Mes de vencimiento [01-12]. MANDATORIO
 datos.setCard_expiration_year("19");//Año de vencimiento[00-99]. MANDATORIO
 datos.setCard_holder_name("TITULAR"); //Nombre del titular tal como aparece en la tarjeta. MANDATORIO
 datos.setCard_holder_birthday(new Date()); //Fecha de nac del titular. OPCIONAL
-datos.setCard_holder_door_number(new Date()); //Nro de puerta del titular. OPCIONAL
+datos.setCard_holder_door_number(10); //Nro de puerta del titular. OPCIONAL
 
 CardHolderIdentification idTitular = new CardHolderIdentification(); //Identificacion del titular de la tarjeta. Es opcional, pero debe estar completo si se agrega
 idTitular.setType(IdentificationType.DNI);//MANDATORIO
@@ -206,7 +206,7 @@ try {
 
 <a name="tokentarjeta"></a>
 
-#### Con tarjeta tokenizada
+#### Token para pagos Online - con tarjeta tokenizada
 
 Mediante este recurso, se genera una token de pago a partir una tarjeta tokenizada previamente.
 
@@ -240,6 +240,48 @@ DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentTokenWith
 ```
 [<sub>Volver a inicio</sub>](#inicio)
 
+#### Token para pagos Offline
+
+Mediante este recurso, se genera una token de pago a partir de los datos del cliente.
+
+|Campo | Descripcion  | Oblig | Restricciones  |Ejemplo   |
+| ------------ | ------------ | ------------ | ------------ | ------------ |
+| customer. name | Nombre del cliente | SI  | Mayor igual a 1 letra  | Valentin Santiago Gomez  |
+| customer.identification.type  |  tipo de documento | SI  | Sin validacion  | dni/DNI, cuil/CUIL  |
+| customer.identification.number  | nro de documento  | SI  |  Sin validacion | 23968498  |
+
+```java
+// ...codigo...
+String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
+//Para el ambiente de produccion(default) usando public api key
+DecidirPaymentToken decidir = new DecidirPaymentToken(publicApiKey);
+//Datos de tarjeta tokenizada
+OfflinePaymentToken datos = new OfflinePaymentToken();
+
+Customer customer = new Customer(); //Identificacion del cliente.
+customer.setName("Maxi");//MANDATORIO
+
+CardHolderIdentification idTitular = new CardHolderIdentification(); //Identificacion del titular de la tarjeta. Es opcional, pero debe estar completo si se agrega
+idTitular.setType(IdentificationType.DNI);//MANDATORIO
+idTitular.setNumber("12345678");//MANDATORIO
+customer.setIdentification(idTitular); //OPCIONAL
+
+datos.setCustomer(customer);//MANDATORIO
+
+try {
+DecidirResponse<PaymentTokenResponse> respuesta = decidir.createOfflinePaymentToken(datos)
+  // Procesamiento de respuesta de la generacion de token de pago
+  // ...codigo...
+} catch (DecidirException de) {
+  // Manejo de excepcion  de Decidir
+  // ...codigo...
+} catch (Exception e) {
+  //Manejo de excepcion general
+  // ...codigo...
+}
+//...codigo...
+```
+[<sub>Volver a inicio</sub>](#inicio)
 
 <a name="cybersource"></a>
 
