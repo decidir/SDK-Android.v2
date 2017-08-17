@@ -54,7 +54,7 @@ uploadArchives {
                 authentication(userName: "admin", password: "R3dB33575")
                 pom.groupId = "com.decidir.api"
                 pom.artifactId = "decidir-sdk-android"
-                pom.version = '0.0.1'
+                pom.version = '0.1.0'
             }
         }
     }
