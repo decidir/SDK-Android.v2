@@ -116,7 +116,7 @@ DecidirPaymentToken decidirProd = new DecidirPaymentToken(publicApiKey, urlProdu
 
 Instanciación de la clase `DecidirPaymentToken`
 
-La misma recibe como parámetros la public key provista por Decidir para el comercio y el ambiente en que se trabajar$aacute;.
+La misma recibe como parámetros la public key provista por Decidir para el comercio y el ambiente en que se trabajar&aacute;.
 
 La API Key será provista por el equipo de Soporte de DECIDIR (soporte@decidir.com.ar).
 
@@ -148,7 +148,7 @@ El token de pago puede ser generado de 3 formas como se muestra a continuaci&oac
 
 #### Token para pagos Online
 
-Mediante este recurso, se genera una token de pago a partir de los datos de la tarjeta del cliente.
+Mediante este recurso, se genera un token de pago a partir de los datos de la tarjeta del cliente.
 
 |Campo | Descripcion  | Oblig | Restricciones  |Ejemplo   |
 | ------------ | ------------ | ------------ | ------------ | ------------ |
@@ -208,7 +208,7 @@ try {
 
 #### Token para pagos Online - con tarjeta tokenizada
 
-Mediante este recurso, se genera una token de pago a partir una tarjeta tokenizada previamente.
+Mediante este recurso, se genera un token de pago a partir una tarjeta tokenizada previamente.
 
 ```java
 // ...codigo...
@@ -242,7 +242,7 @@ DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentTokenWith
 
 #### Token para pagos Offline
 
-Mediante este recurso, se genera una token de pago a partir de los datos del cliente.
+Mediante este recurso, se genera un token de pago a partir de los datos del cliente.
 
 |Campo | Descripcion  | Oblig | Restricciones  |Ejemplo   |
 | ------------ | ------------ | ------------ | ------------ | ------------ |
