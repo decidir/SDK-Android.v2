@@ -2,17 +2,21 @@ package com.android.decidir.sdk;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.android.decidir.sdk.dto.PaymentToken;
+
 import com.android.decidir.sdk.dto.CardHolderIdentification;
+import com.android.decidir.sdk.dto.IdentificationType;
 import com.android.decidir.sdk.dto.PaymentError;
+import com.android.decidir.sdk.dto.PaymentToken;
 import com.android.decidir.sdk.validaters.PaymentTokenValidator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.when;
 
 import java.util.Map;
+
+import static org.mockito.Mockito.when;
 
 /**
  * Created by biandra on 09/11/16.
@@ -38,7 +42,7 @@ public class AuthenticationValidatorTests {
         authentication.setCard_number("4507990000004905");
         authentication.setSecurity_code("1234");
         CardHolderIdentification cardHolderIdentification = new CardHolderIdentification();
-        cardHolderIdentification.setType("dni");
+        cardHolderIdentification.setType(IdentificationType.DNI);
         cardHolderIdentification.setNumber("12123123");
         authentication.setCard_holder_identification(cardHolderIdentification);
 
@@ -60,7 +64,7 @@ public class AuthenticationValidatorTests {
         authentication.setCard_number("4507990000004905");
         authentication.setSecurity_code("1234");
         CardHolderIdentification cardHolderIdentification = new CardHolderIdentification();
-        cardHolderIdentification.setType("dni");
+        cardHolderIdentification.setType(IdentificationType.DNI);
         cardHolderIdentification.setNumber("12123123");
         authentication.setCard_holder_identification(cardHolderIdentification);
 

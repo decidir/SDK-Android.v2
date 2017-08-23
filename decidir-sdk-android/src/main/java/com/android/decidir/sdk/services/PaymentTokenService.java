@@ -15,6 +15,9 @@ import com.android.decidir.sdk.exceptions.DecidirException;
 import com.android.decidir.sdk.resources.PaymentTokenApi;
 import com.android.decidir.sdk.resources.FraudDetectionApi;
 import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -61,6 +64,34 @@ public class PaymentTokenService {
         }
     }
 
+    public void getPaymentTokenAsync(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs,
+                                     final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+        if (withCybersource){
+            paymentToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
+        }
+        this.paymentTokenApi.get(paymentToken).enqueue(new Callback<PaymentTokenResponse>() {
+            @Override
+            public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(paymentTokenConverter.convert(response, response.body()));
+                } else {
+                    try {
+                        DecidirResponse<DecidirError> error = errorConverter.convert(response);
+                        DecidirException e = DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
+                        callback.onFailure(e);
+                    } catch(IOException ioe) {
+                        callback.onFailure(new DecidirException(HTTP_500, ioe.getMessage()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentTokenResponse> call, Throwable t) {
+                callback.onFailure(new DecidirException(HTTP_500, t.getMessage()));
+            }
+        });
+    }
+
     public DecidirResponse<PaymentTokenResponse> getPaymentToken(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) {
         try {
             if (withCybersource){
@@ -78,6 +109,34 @@ public class PaymentTokenService {
         }
     }
 
+    public void getPaymentTokenAsync(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs,
+                                     final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+        if (withCybersource){
+            paymentTokenWithCardToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
+        }
+        this.paymentTokenApi.get(paymentTokenWithCardToken).enqueue(new Callback<PaymentTokenResponse>() {
+            @Override
+            public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(paymentTokenConverter.convert(response, response.body()));
+                } else {
+                    try {
+                        DecidirResponse<DecidirError> error = errorConverter.convert(response);
+                        DecidirException e = DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
+                        callback.onFailure(e);
+                    } catch(IOException ioe) {
+                        callback.onFailure(new DecidirException(HTTP_500, ioe.getMessage()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentTokenResponse> call, Throwable t) {
+                callback.onFailure(new DecidirException(HTTP_500, t.getMessage()));
+            }
+        });
+    }
+
     public DecidirResponse<OfflinePaymentTokenResponse> getPaymentToken(OfflinePaymentToken offlinePaymentToken) {
         try {
             Response<OfflinePaymentTokenResponse> response = this.paymentTokenApi.get(offlinePaymentToken).execute();
@@ -90,5 +149,30 @@ public class PaymentTokenService {
         } catch(IOException ioe) {
             throw new DecidirException(HTTP_500, ioe.getMessage());
         }
+    }
+
+    public void getPaymentTokenAsync(OfflinePaymentToken offlinePaymentToken,
+                                     final DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>> callback) {
+        this.paymentTokenApi.get(offlinePaymentToken).enqueue(new Callback<OfflinePaymentTokenResponse>() {
+            @Override
+            public void onResponse(Call<OfflinePaymentTokenResponse> call, Response<OfflinePaymentTokenResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(paymentTokenConverter.convert(response, response.body()));
+                } else {
+                    try {
+                        DecidirResponse<DecidirError> error = errorConverter.convert(response);
+                        DecidirException e = DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
+                        callback.onFailure(e);
+                    } catch (IOException ioe) {
+                        callback.onFailure(new DecidirException(HTTP_500, ioe.getMessage()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OfflinePaymentTokenResponse> call, Throwable t) {
+                callback.onFailure(new DecidirException(HTTP_500, t.getMessage()));
+            }
+        });
     }
 }
