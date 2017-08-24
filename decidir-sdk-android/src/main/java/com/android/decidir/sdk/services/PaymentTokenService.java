@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.decidir.sdk.converters.PaymentTokenConverter;
 import com.android.decidir.sdk.converters.ErrorConverter;
+import com.android.decidir.sdk.dto.FraudDetectionData;
 import com.android.decidir.sdk.dto.OfflinePaymentToken;
 import com.android.decidir.sdk.dto.OfflinePaymentTokenResponse;
 import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
@@ -64,11 +65,30 @@ public class PaymentTokenService {
         }
     }
 
-    public void getPaymentTokenAsync(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs,
+    public void getPaymentTokenAsync(final PaymentToken paymentToken,
+                                     final Context context,
+                                     Boolean withCybersource,
+                                     final Integer profilingTimeoutSecs,
                                      final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         if (withCybersource){
-            paymentToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
+            fraudDetectionService.getFraudDetectionAsync(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
+                @Override
+                public void onSuccess(FraudDetectionData response) {
+                    paymentToken.setFraud_detection(response);
+                    doGetPaymentAsync(paymentToken, callback);
+                }
+
+                @Override
+                public void onFailure(DecidirException e) {
+                    callback.onFailure(e);
+                }
+            });
+        } else {
+            doGetPaymentAsync(paymentToken, callback);
         }
+    }
+
+    private void doGetPaymentAsync(PaymentToken paymentToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         this.paymentTokenApi.get(paymentToken).enqueue(new Callback<PaymentTokenResponse>() {
             @Override
             public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
@@ -109,11 +129,30 @@ public class PaymentTokenService {
         }
     }
 
-    public void getPaymentTokenAsync(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs,
+    public void getPaymentTokenAsync(final PaymentTokenWithCardToken paymentTokenWithCardToken,
+                                     final Context context,
+                                     Boolean withCybersource,
+                                     final Integer profilingTimeoutSecs,
                                      final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         if (withCybersource){
-            paymentTokenWithCardToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
+            fraudDetectionService.getFraudDetectionAsync(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
+                @Override
+                public void onSuccess(FraudDetectionData response) {
+                    paymentTokenWithCardToken.setFraud_detection(response);
+                    doGetPaymentTokenAsync(paymentTokenWithCardToken, callback);
+                }
+
+                @Override
+                public void onFailure(DecidirException e) {
+                    callback.onFailure(e);
+                }
+            });
+        } else {
+            doGetPaymentTokenAsync(paymentTokenWithCardToken, callback);
         }
+    }
+
+    private void doGetPaymentTokenAsync(PaymentTokenWithCardToken paymentTokenWithCardToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         this.paymentTokenApi.get(paymentTokenWithCardToken).enqueue(new Callback<PaymentTokenResponse>() {
             @Override
             public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
