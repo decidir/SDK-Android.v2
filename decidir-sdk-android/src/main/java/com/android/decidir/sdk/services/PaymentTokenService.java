@@ -48,34 +48,17 @@ public class PaymentTokenService {
         return service;
     }
 
-    public DecidirResponse<PaymentTokenResponse> getPaymentToken(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) {
-        try {
-            if (withCybersource){
-                paymentToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
-            }
-            Response<PaymentTokenResponse> response = this.paymentTokenApi.get(paymentToken).execute();
-            if (response.isSuccessful()) {
-                return paymentTokenConverter.convert(response, response.body());
-            } else {
-                DecidirResponse<DecidirError> error = errorConverter.convert(response);
-                throw DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
-            }
-        } catch(IOException ioe) {
-            throw new DecidirException(HTTP_500, ioe.getMessage());
-        }
-    }
-
-    public void getPaymentTokenAsync(final PaymentToken paymentToken,
+    public void getPaymentToken(final PaymentToken paymentToken,
                                      final Context context,
                                      Boolean withCybersource,
                                      final Integer profilingTimeoutSecs,
                                      final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         if (withCybersource){
-            fraudDetectionService.getFraudDetectionAsync(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
+            fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
                 @Override
                 public void onSuccess(FraudDetectionData response) {
                     paymentToken.setFraud_detection(response);
-                    doGetPaymentAsync(paymentToken, callback);
+                    doGetPayment(paymentToken, callback);
                 }
 
                 @Override
@@ -84,11 +67,11 @@ public class PaymentTokenService {
                 }
             });
         } else {
-            doGetPaymentAsync(paymentToken, callback);
+            doGetPayment(paymentToken, callback);
         }
     }
 
-    private void doGetPaymentAsync(PaymentToken paymentToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+    private void doGetPayment(PaymentToken paymentToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         this.paymentTokenApi.get(paymentToken).enqueue(new Callback<PaymentTokenResponse>() {
             @Override
             public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
@@ -112,34 +95,17 @@ public class PaymentTokenService {
         });
     }
 
-    public DecidirResponse<PaymentTokenResponse> getPaymentToken(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) {
-        try {
-            if (withCybersource){
-                paymentTokenWithCardToken.setFraud_detection(fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs));
-            }
-            Response<PaymentTokenResponse> response = this.paymentTokenApi.get(paymentTokenWithCardToken).execute();
-            if (response.isSuccessful()) {
-                return paymentTokenConverter.convert(response, response.body());
-            } else {
-                DecidirResponse<DecidirError> error = errorConverter.convert(response);
-                throw DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
-            }
-        } catch(IOException ioe) {
-            throw new DecidirException(HTTP_500, ioe.getMessage());
-        }
-    }
-
-    public void getPaymentTokenAsync(final PaymentTokenWithCardToken paymentTokenWithCardToken,
+    public void getPaymentToken(final PaymentTokenWithCardToken paymentTokenWithCardToken,
                                      final Context context,
                                      Boolean withCybersource,
                                      final Integer profilingTimeoutSecs,
                                      final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         if (withCybersource){
-            fraudDetectionService.getFraudDetectionAsync(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
+            fraudDetectionService.getFraudDetection(context, profilingTimeoutSecs, new DecidirCallback<FraudDetectionData>() {
                 @Override
                 public void onSuccess(FraudDetectionData response) {
                     paymentTokenWithCardToken.setFraud_detection(response);
-                    doGetPaymentTokenAsync(paymentTokenWithCardToken, callback);
+                    doGetPaymentToken(paymentTokenWithCardToken, callback);
                 }
 
                 @Override
@@ -148,11 +114,11 @@ public class PaymentTokenService {
                 }
             });
         } else {
-            doGetPaymentTokenAsync(paymentTokenWithCardToken, callback);
+            doGetPaymentToken(paymentTokenWithCardToken, callback);
         }
     }
 
-    private void doGetPaymentTokenAsync(PaymentTokenWithCardToken paymentTokenWithCardToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+    private void doGetPaymentToken(PaymentTokenWithCardToken paymentTokenWithCardToken, final DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
         this.paymentTokenApi.get(paymentTokenWithCardToken).enqueue(new Callback<PaymentTokenResponse>() {
             @Override
             public void onResponse(Call<PaymentTokenResponse> call, Response<PaymentTokenResponse> response) {
@@ -176,21 +142,7 @@ public class PaymentTokenService {
         });
     }
 
-    public DecidirResponse<OfflinePaymentTokenResponse> getPaymentToken(OfflinePaymentToken offlinePaymentToken) {
-        try {
-            Response<OfflinePaymentTokenResponse> response = this.paymentTokenApi.get(offlinePaymentToken).execute();
-            if (response.isSuccessful()) {
-                return paymentTokenConverter.convert(response, response.body());
-            } else {
-                DecidirResponse<DecidirError> error = errorConverter.convert(response);
-                throw DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
-            }
-        } catch(IOException ioe) {
-            throw new DecidirException(HTTP_500, ioe.getMessage());
-        }
-    }
-
-    public void getPaymentTokenAsync(OfflinePaymentToken offlinePaymentToken,
+    public void getPaymentToken(OfflinePaymentToken offlinePaymentToken,
                                      final DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>> callback) {
         this.paymentTokenApi.get(offlinePaymentToken).enqueue(new Callback<OfflinePaymentTokenResponse>() {
             @Override

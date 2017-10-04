@@ -1,12 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
+
+version = '0.1.4'
+
 android {
     lintOptions {
         abortOnError false
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 14
@@ -24,10 +27,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-    /*compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }*/
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 repositories {
@@ -38,6 +41,7 @@ repositories {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile "com.squareup.retrofit2:converter-jackson:2.0.2"
@@ -47,14 +51,24 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.10.19'
 }
 
+
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android-snapshot/") {
-                authentication(userName: "admin", password: "R3dB33575")
-                pom.groupId = "com.decidir.api"
-                pom.artifactId = "decidir-sdk-android"
-                pom.version = '0.1.0'
+            if(project.version.endsWith('-SNAPSHOT')) {
+                snapshotRepository(url: "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android-snapshot/") {
+                    authentication(userName: "readwrite", password: "YFeTajaS!FW%3!s5")
+                    pom.groupId = "com.decidir.api"
+                    pom.artifactId = "decidir-sdk-android"
+                    pom.version = version
+                }
+            } else{
+                repository(url: "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android/") {
+                    authentication(userName: "readwrite", password: "YFeTajaS!FW%3!s5")
+                    pom.groupId = "com.decidir.api"
+                    pom.artifactId = "decidir-sdk-android"
+                    pom.version = version
+                }
             }
         }
     }

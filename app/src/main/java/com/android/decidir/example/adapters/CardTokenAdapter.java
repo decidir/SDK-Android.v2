@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.decidir.example.R;
-import com.decidir.sdk.dto.CardToken;
+import com.decidir.sdk.dto.tokens.CardToken;
 
 import java.util.List;
 

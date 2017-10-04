@@ -1,7 +1,7 @@
 package com.android.decidir.example.viewlistener;
 
 import com.android.decidir.example.domain.ErrorDetail;
-import com.decidir.sdk.dto.Payment;
+import com.decidir.sdk.payments.Payment;
 
 /**
  * Created by biandra on 17/08/16.

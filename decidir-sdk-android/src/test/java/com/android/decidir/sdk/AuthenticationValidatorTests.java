@@ -1,29 +1,11 @@
 package com.android.decidir.sdk;
 
-import android.content.Context;
-import android.content.res.Resources;
-
-import com.android.decidir.sdk.dto.CardHolderIdentification;
-import com.android.decidir.sdk.dto.IdentificationType;
-import com.android.decidir.sdk.dto.PaymentError;
-import com.android.decidir.sdk.dto.PaymentToken;
-import com.android.decidir.sdk.validaters.PaymentTokenValidator;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Map;
-
-import static org.mockito.Mockito.when;
-
 /**
  * Created by biandra on 09/11/16.
  */
 public class AuthenticationValidatorTests {
 
-    @Mock
+   /* @Mock
     Context context;
     @Mock
     Resources resources;
@@ -75,5 +57,5 @@ public class AuthenticationValidatorTests {
 
         assert !result.isEmpty();
         assert result.containsKey(PaymentError.CARD_EXPIRATION);
-    }
+    }*/
 }

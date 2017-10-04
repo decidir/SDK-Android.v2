@@ -38,25 +38,7 @@ public class FraudDetectionService {
         return service;
     }
 
-    public FraudDetectionData getFraudDetection(Context context, Integer profilingTimeoutSecs) throws DecidirException {
-        FraudDetectionResponse fDResponse;
-        try {
-            Response<FraudDetectionResponse> response = this.fraudDetectionApi.getfrauddetectionconf().execute();
-            if (response.isSuccessful()) {
-                fDResponse = response.body();
-            } else {
-                DecidirResponse<DecidirError> error = errorConverter.convert(response);
-                throw DecidirException.wrap(error.getStatus(), error.getMessage(), error.getResult());
-            }
-        } catch(IOException ioe) {
-            throw new DecidirException(HTTP_500, ioe.getMessage());
-        }
-        FraudDetectionData fraudDetectionData = new FraudDetectionData();
-        fraudDetectionData.setDevice_unique_identifier(getUniqueIdFD(fDResponse.getOrg_id(), context, profilingTimeoutSecs));
-        return fraudDetectionData;
-    }
-
-    public void getFraudDetectionAsync(final Context context, final Integer profilingTimeoutSecs,
+    public void getFraudDetection(final Context context, final Integer profilingTimeoutSecs,
                                        final DecidirCallback<FraudDetectionData> callback) {
         this.fraudDetectionApi.getfrauddetectionconf().enqueue(new Callback<FraudDetectionResponse>() {
             @Override
@@ -65,6 +47,7 @@ public class FraudDetectionService {
                     FraudDetectionResponse fDResponse = response.body();
                     FraudDetectionData fraudDetectionData = new FraudDetectionData();
                     fraudDetectionData.setDevice_unique_identifier(getUniqueIdFD(fDResponse.getOrg_id(), context, profilingTimeoutSecs));
+                    callback.onSuccess(fraudDetectionData);
                 } else {
                     try {
                         DecidirResponse<DecidirError> error = errorConverter.convert(response);

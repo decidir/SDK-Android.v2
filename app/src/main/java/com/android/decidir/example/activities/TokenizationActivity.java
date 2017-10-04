@@ -17,8 +17,8 @@ import com.android.decidir.example.domain.CardTokenRequest;
 import com.android.decidir.example.domain.ErrorDetail;
 import com.android.decidir.example.viewlistener.TokenizationActivityListener;
 import com.android.decidir.example.viewmodel.TokenizationActivityModel;
-import com.decidir.sdk.dto.CardToken;
-import com.decidir.sdk.dto.CardTokens;
+import com.decidir.sdk.dto.tokens.CardToken;
+import com.decidir.sdk.dto.tokens.CardTokens;
 
 import java.util.List;
 

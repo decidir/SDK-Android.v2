@@ -1,7 +1,7 @@
 package com.android.decidir.example.viewlistener;
 
 import com.android.decidir.example.domain.ErrorDetail;
-import com.decidir.sdk.dto.CardTokens;
+import com.decidir.sdk.dto.tokens.CardTokens;
 
 /**
  * Created by biandra on 23/09/16.

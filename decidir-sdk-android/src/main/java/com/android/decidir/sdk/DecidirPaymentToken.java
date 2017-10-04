@@ -3,15 +3,14 @@ package com.android.decidir.sdk;
 import android.content.Context;
 
 import com.android.decidir.sdk.configuration.DecidirConfiguration;
+import com.android.decidir.sdk.dto.DecidirResponse;
 import com.android.decidir.sdk.dto.OfflinePaymentToken;
 import com.android.decidir.sdk.dto.OfflinePaymentTokenResponse;
-import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
 import com.android.decidir.sdk.dto.PaymentToken;
 import com.android.decidir.sdk.dto.PaymentTokenResponse;
-import com.android.decidir.sdk.dto.DecidirResponse;
-import com.android.decidir.sdk.exceptions.DecidirException;
-import com.android.decidir.sdk.resources.PaymentTokenApi;
+import com.android.decidir.sdk.dto.PaymentTokenWithCardToken;
 import com.android.decidir.sdk.resources.FraudDetectionApi;
+import com.android.decidir.sdk.resources.PaymentTokenApi;
 import com.android.decidir.sdk.services.DecidirCallback;
 import com.android.decidir.sdk.services.PaymentTokenService;
 
@@ -65,25 +64,13 @@ public class DecidirPaymentToken {
      * @param context
      * @param withCybersource
      * @param profilingTimeoutSecs
-     * @return a {@link PaymentTokenResponse} with the {@link PaymentTokenResponse}
-     * @throws DecidirException when an error ocurrs
-     */
-    public DecidirResponse<PaymentTokenResponse> createPaymentToken(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
-        return paymentTokenService.getPaymentToken(paymentToken, context, withCybersource, profilingTimeoutSecs);
-    }
-
-    /**
-     * Create Payment Token without card token asynchronously
-     * @param paymentToken
-     * @param context
-     * @param withCybersource
-     * @param profilingTimeoutSecs
      * @param callback
      * @return a {@link PaymentTokenResponse} with the {@link PaymentTokenResponse}
      */
-    public void createPaymentTokenAsync(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs, DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
-        paymentTokenService.getPaymentTokenAsync(paymentToken, context, withCybersource, profilingTimeoutSecs, callback);
+    public void createPaymentToken(PaymentToken paymentToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs, DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+        paymentTokenService.getPaymentToken(paymentToken, context, withCybersource, profilingTimeoutSecs, callback);
     }
+
 
     /**
      * Create Payment Token  with card token
@@ -91,34 +78,11 @@ public class DecidirPaymentToken {
      * @param context
      * @param withCybersource
      * @param profilingTimeoutSecs
-     * @return a {@link PaymentTokenResponse} with the {@link PaymentTokenResponse}
-     * @throws DecidirException when an error ocurrs
-     */
-    public DecidirResponse<PaymentTokenResponse> createPaymentTokenWithCardToken(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs) throws DecidirException {
-        return paymentTokenService.getPaymentToken(paymentTokenWithCardToken, context, withCybersource, profilingTimeoutSecs);
-    }
-
-    /**
-     * Create Payment Token  with card token asynchronously
-     * @param paymentTokenWithCardToken
-     * @param context
-     * @param withCybersource
-     * @param profilingTimeoutSecs
      * @param callback
      * @return a {@link PaymentTokenResponse} with the {@link PaymentTokenResponse}
      */
-    public void createPaymentTokenWithCardTokenAsync(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs, DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
-        paymentTokenService.getPaymentTokenAsync(paymentTokenWithCardToken, context, withCybersource, profilingTimeoutSecs, callback);
-    }
-
-    /**
-     *
-     * @param offlinePaymentToken
-     * @return a {@link OfflinePaymentTokenResponse} with the {@link OfflinePaymentTokenResponse}
-     * @throws DecidirException when an error ocurrs
-     */
-    public DecidirResponse<OfflinePaymentTokenResponse> createOfflinePaymentToken(OfflinePaymentToken offlinePaymentToken) throws DecidirException {
-        return paymentTokenService.getPaymentToken(offlinePaymentToken);
+    public void createPaymentTokenWithCardToken(PaymentTokenWithCardToken paymentTokenWithCardToken, Context context, Boolean withCybersource, Integer profilingTimeoutSecs, DecidirCallback<DecidirResponse<PaymentTokenResponse>> callback) {
+        paymentTokenService.getPaymentToken(paymentTokenWithCardToken, context, withCybersource, profilingTimeoutSecs, callback);
     }
 
     /**
@@ -127,7 +91,7 @@ public class DecidirPaymentToken {
      * @param callback
      * @return a {@link OfflinePaymentTokenResponse} with the {@link OfflinePaymentTokenResponse}
      */
-    public void createOfflinePaymentTokenAsync(OfflinePaymentToken offlinePaymentToken, DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>> callback)  {
-        paymentTokenService.getPaymentTokenAsync(offlinePaymentToken, callback);
+    public void createOfflinePaymentToken(OfflinePaymentToken offlinePaymentToken, DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>> callback)  {
+        paymentTokenService.getPaymentToken(offlinePaymentToken, callback);
     }
 }
