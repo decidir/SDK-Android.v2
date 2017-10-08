@@ -78,7 +78,21 @@ import com.android.decidir.sdk.dto.*;
 import com.android.decidir.sdk.exceptions.*;
 import com.android.decidir.sdk.services.DecidirCallback;
 ```
+Otra alternativa, es utilizar el manejador de dependencias 
+``` groovy
+apply plugin: 'com.android.application'
 
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repo.dev.redbee.io/content/repositories/decidir-sdk-android/"
+    }
+}
+
+dependencies {
+	compile 'com.decidir.api:decidir-sdk-android:0.1.5'
+}
+```
 <a name="versionesdeandroidsoportadas"></a>
 ### Versiones de Android soportadas
 La versi&oacute;n implementada de la SDK, est&aacute; testeada para versiones desde API Level 14 (Android version >= 4.0)
@@ -190,18 +204,18 @@ Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
 decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude, new DecidirCallback<DecidirResponse<PaymentTokenResponse>>() {
-            @Override
-            public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
-                // Procesamiento de respuesta de la generacion de token de pago
-                // ...codigo...
-            }
+    @Override
+    public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
+        // Procesamiento de respuesta de la generacion de token de pago
+        // ...codigo...
+    }
 
-            @Override
-            public void onFailure(DecidirException e) {
-                // Manejo de excepcion  de Decidir
-                // ...codigo...
-            }
-        });
+    @Override
+    public void onFailure(DecidirException e) {
+        // Manejo de excepcion  de Decidir
+        // ...codigo...
+    }
+});
 //...codigo...
 ```
 
@@ -229,18 +243,18 @@ Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
 decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude, new DecidirCallback<DecidirResponse<PaymentTokenResponse>>() {
-            @Override
-            public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
-                // Procesamiento de respuesta de la generacion de token de pago
-                // ...codigo...
-            }
+    @Override
+    public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
+        // Procesamiento de respuesta de la generacion de token de pago
+        // ...codigo...
+    }
 
-            @Override
-            public void onFailure(DecidirException e) {
-                // Manejo de excepcion  de Decidir
-                // ...codigo...
-            }
-        });
+    @Override
+    public void onFailure(DecidirException e) {
+        // Manejo de excepcion  de Decidir
+        // ...codigo...
+    }
+});
 //...codigo...
 ```
 [<sub>Volver a inicio</sub>](#inicio)
@@ -273,19 +287,19 @@ customer.setIdentification(idTitular); //OPCIONAL
 
 datos.setCustomer(customer);//MANDATORIO
 
-decidir.createPaymentTokenWithCardToken(datos, new DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>>() {
-            @Override
-            public void onSuccess(final DecidirResponse<OfflinePaymentTokenResponse> offlinePaymentTokenResponse) {
-                // Procesamiento de respuesta de la generacion de token de pago
-                // ...codigo...
-            }
+decidir.createOfflinePaymentToken(datos, new DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>>() {
+    @Override
+    public void onSuccess(final DecidirResponse<OfflinePaymentTokenResponse> offlinePaymentTokenResponse) {
+        // Procesamiento de respuesta de la generacion de token de pago
+        // ...codigo...
+    }
 
-            @Override
-            public void onFailure(DecidirException e) {
-                // Manejo de excepcion  de Decidir
-                // ...codigo...
-            }
-        });
+    @Override
+    public void onFailure(DecidirException e) {
+        // Manejo de excepcion  de Decidir
+        // ...codigo...
+    }
+});
 //...codigo...
 ```
 [<sub>Volver a inicio</sub>](#inicio)
