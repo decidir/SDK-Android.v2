@@ -1,12 +1,12 @@
 package com.android.decidir.sdk.configuration;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by biandra on 06/07/16.
@@ -34,7 +34,7 @@ public class DecidirConfiguration {
                 Request request = chain.request().newBuilder()
                         .header(CACHE_CONTROL, MAX_AGE_0)
                         .header(APIKEY, secretAccessToken)
-                        .header("X-Consumer-Username", secretAccessToken + "_public")
+                        //.header("X-Consumer-Username", secretAccessToken + "_public")
                         .header(USER_AGENT, getUserAgent())
                         .build();
 

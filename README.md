@@ -76,6 +76,7 @@ Una vez descargado y descomprimido, se debe agregar la librería `decidir-sdk-an
 import com.android.decidir.sdk.DecidirPaymentToken;
 import com.android.decidir.sdk.dto.*;
 import com.android.decidir.sdk.exceptions.*;
+import com.android.decidir.sdk.services.DecidirCallback;
 ```
 
 <a name="versionesdeandroidsoportadas"></a>
@@ -96,8 +97,8 @@ import com.android.decidir.sdk.DecidirPaymentToken;
 
 public class MiClase {
 String publicApiKey = "92b71cf711ca41f78362a7134f87ff65";
-String urlDesarrollo = "https://developers.decidir.com/api/v1";
-String urlProduccion = "https://live.decidir.com/api/v1";
+String urlDesarrollo = "https://developers.decidir.com/api/v2";
+String urlProduccion = "https://live.decidir.com/api/v2";
 int timeout = 2; //Expresado en segundos
 //Para el ambiente de desarrollo
 DecidirPaymentToken decidirDesa = new DecidirPaymentToken(publicApiKey, urlDesarrollo, timeout);
@@ -188,17 +189,19 @@ Context context = ... //Application context ( android.content.Context)
 Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por CyberSource
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
-try {
-  DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude)
-  // Procesamiento de respuesta de la generacion de token de pago
-  // ...codigo...
-} catch (DecidirException de) {
-  // Manejo de excepcion  de Decidir
-  // ...codigo...
-} catch (Exception e) {
-  //Manejo de excepcion general
-  // ...codigo...
-}
+decidir.createPaymentToken(datos, context, deteccionFraude, timeoutFraude, new DecidirCallback<DecidirResponse<PaymentTokenResponse>>() {
+            @Override
+            public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
+                // Procesamiento de respuesta de la generacion de token de pago
+                // ...codigo...
+            }
+
+            @Override
+            public void onFailure(DecidirException e) {
+                // Manejo de excepcion  de Decidir
+                // ...codigo...
+            }
+        });
 //...codigo...
 ```
 
@@ -225,17 +228,19 @@ Context context = ... //Application context ( android.content.Context)
 Boolean deteccionFraude = Boolean.TRUE; // Si se realiza deteccion de fraude por CyberSource
 int timeoutFraude = 10; //Timeout para la solicitud de deteccion de fraude. Expresado en segundos. Por default es 30 segundos.
 
-try {
-DecidirResponse<PaymentTokenResponse> respuesta = decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude)
-  // Procesamiento de respuesta de la generacion de token de pago
-  // ...codigo...
-} catch (DecidirException de) {
-  // Manejo de excepcion  de Decidir
-  // ...codigo...
-} catch (Exception e) {
-  //Manejo de excepcion general
-  // ...codigo...
-}
+decidir.createPaymentTokenWithCardToken(datos, context, deteccionFraude, timeoutFraude, new DecidirCallback<DecidirResponse<PaymentTokenResponse>>() {
+            @Override
+            public void onSuccess(final DecidirResponse<PaymentTokenResponse> paymentTokenResponse) {
+                // Procesamiento de respuesta de la generacion de token de pago
+                // ...codigo...
+            }
+
+            @Override
+            public void onFailure(DecidirException e) {
+                // Manejo de excepcion  de Decidir
+                // ...codigo...
+            }
+        });
 //...codigo...
 ```
 [<sub>Volver a inicio</sub>](#inicio)
@@ -268,17 +273,19 @@ customer.setIdentification(idTitular); //OPCIONAL
 
 datos.setCustomer(customer);//MANDATORIO
 
-try {
-DecidirResponse<OfflinePaymentTokenResponse> respuesta = decidir.createOfflinePaymentToken(datos)
-  // Procesamiento de respuesta de la generacion de token de pago
-  // ...codigo...
-} catch (DecidirException de) {
-  // Manejo de excepcion  de Decidir
-  // ...codigo...
-} catch (Exception e) {
-  //Manejo de excepcion general
-  // ...codigo...
-}
+decidir.createPaymentTokenWithCardToken(datos, new DecidirCallback<DecidirResponse<OfflinePaymentTokenResponse>>() {
+            @Override
+            public void onSuccess(final DecidirResponse<OfflinePaymentTokenResponse> offlinePaymentTokenResponse) {
+                // Procesamiento de respuesta de la generacion de token de pago
+                // ...codigo...
+            }
+
+            @Override
+            public void onFailure(DecidirException e) {
+                // Manejo de excepcion  de Decidir
+                // ...codigo...
+            }
+        });
 //...codigo...
 ```
 [<sub>Volver a inicio</sub>](#inicio)
